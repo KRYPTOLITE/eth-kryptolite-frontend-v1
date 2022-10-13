@@ -8,11 +8,14 @@ interface TokenPairImageProps {
 }
 
 const getImageUrlFromToken = (token: Token) => {
-  const address = token.symbol === "BNB" ? tokens.wbnb.address : token.address;
+  const address = token.symbol === "ETH" ? tokens.wbnb.address : token.address;
   return `/images/tokens/${address}.svg`;
 };
 
-export default function TokenPairImage({ primaryToken, secondaryToken }: TokenPairImageProps) {
+export default function TokenPairImage({
+  primaryToken,
+  secondaryToken,
+}: TokenPairImageProps) {
   return (
     <div className="relative inline-block h-[70px] w-[70px] mr-2">
       <div className="w-8 h-8 inline-block absolute top-1 left-1 rounded-full">
@@ -23,12 +26,19 @@ export default function TokenPairImage({ primaryToken, secondaryToken }: TokenPa
         />
       </div>
       <div className="w-14 h-14 inline-block absolute bottom-1 right-1 rounded-full">
-        <TokenImage src={getImageUrlFromToken(primaryToken)} alt={primaryToken.name || ""} className="w-full h-full" />
+        <TokenImage
+          src={getImageUrlFromToken(primaryToken)}
+          alt={primaryToken.name || ""}
+          className="w-full h-full"
+        />
       </div>
     </div>
   );
 }
 
-export const TokenImage = ({ alt, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) => {
+export const TokenImage = ({
+  alt,
+  ...props
+}: React.ImgHTMLAttributes<HTMLImageElement>) => {
   return <img alt={alt} {...props} />;
 };

@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import useActiveWeb3React from "./useActiveWeb3React";
 import { useTransactionAdder } from "../state/transactions/hooks";
 import { useCurrencyBalance } from "../state/wallet/hooks";
-import { useWBNBContract } from "./useContract";
+import { useWETHContract } from "./useContract";
 import { useCallWithGasPrice } from "./useCallWithGasPrice";
 import { Currency, ETHER } from "../config/entities/currency";
 import { currencyEquals, WETH } from "../config/entities/token";
@@ -24,33 +24,50 @@ const NOT_APPLICABLE = { wrapType: WrapType.NOT_APPLICABLE };
 export default function useWrapCallback(
   inputCurrency: Currency | undefined,
   outputCurrency: Currency | undefined,
-  typedValue: string | undefined,
-): { wrapType: WrapType; execute?: undefined | (() => Promise<void>); inputError?: string } {
+  typedValue: string | undefined
+): {
+  wrapType: WrapType;
+  execute?: undefined | (() => Promise<void>);
+  inputError?: string;
+} {
   const { chainId, account } = useActiveWeb3React();
   const { callWithGasPrice } = useCallWithGasPrice();
-  const wbnbContract = useWBNBContract();
+  const wbnbContract = useWETHContract();
   const balance = useCurrencyBalance(account ?? undefined, inputCurrency);
   // we can always parse the amount typed as the input currency, since wrapping is 1:1
-  const inputAmount = useMemo(() => tryParseAmount(typedValue, inputCurrency), [inputCurrency, typedValue]);
+  const inputAmount = useMemo(
+    () => tryParseAmount(typedValue, inputCurrency),
+    [inputCurrency, typedValue]
+  );
   const addTransaction = useTransactionAdder();
 
   return useMemo(() => {
-    if (!wbnbContract || !chainId || !inputCurrency || !outputCurrency) return NOT_APPLICABLE;
+    if (!wbnbContract || !chainId || !inputCurrency || !outputCurrency)
+      return NOT_APPLICABLE;
 
-    const sufficientBalance = inputAmount && balance && !balance.lessThan(inputAmount);
+    const sufficientBalance =
+      inputAmount && balance && !balance.lessThan(inputAmount);
 
-    if (inputCurrency === ETHER && currencyEquals(WETH[chainId], outputCurrency)) {
+    if (
+      inputCurrency === ETHER &&
+      currencyEquals(WETH[chainId], outputCurrency)
+    ) {
       return {
         wrapType: WrapType.WRAP,
         execute:
           sufficientBalance && inputAmount
             ? async () => {
                 try {
-                  const txReceipt = await callWithGasPrice(wbnbContract, "deposit", undefined, {
-                    value: `0x${inputAmount.raw.toString(16)}`,
-                  });
+                  const txReceipt = await callWithGasPrice(
+                    wbnbContract,
+                    "deposit",
+                    undefined,
+                    {
+                      value: `0x${inputAmount.raw.toString(16)}`,
+                    }
+                  );
                   addTransaction(txReceipt, {
-                    summary: `Wrap ${inputAmount.toSignificant(6)} BNB to WBNB`,
+                    summary: `Wrap ${inputAmount.toSignificant(6)} ETH to WETH`,
                     type: "wrap",
                   });
                 } catch (error) {
@@ -58,28 +75,46 @@ export default function useWrapCallback(
                 }
               }
             : undefined,
-        inputError: sufficientBalance ? undefined : "Insufficient BNB balance",
+        inputError: sufficientBalance ? undefined : "Insufficient ETH balance",
       };
     }
-    if (currencyEquals(WETH[chainId], inputCurrency) && outputCurrency === ETHER) {
+    if (
+      currencyEquals(WETH[chainId], inputCurrency) &&
+      outputCurrency === ETHER
+    ) {
       return {
         wrapType: WrapType.UNWRAP,
         execute:
           sufficientBalance && inputAmount
             ? async () => {
                 try {
-                  const txReceipt = await callWithGasPrice(wbnbContract, "withdraw", [
-                    `0x${inputAmount.raw.toString(16)}`,
-                  ]);
-                  addTransaction(txReceipt, { summary: `Unwrap ${inputAmount.toSignificant(6)} WBNB to BNB` });
+                  const txReceipt = await callWithGasPrice(
+                    wbnbContract,
+                    "withdraw",
+                    [`0x${inputAmount.raw.toString(16)}`]
+                  );
+                  addTransaction(txReceipt, {
+                    summary: `Unwrap ${inputAmount.toSignificant(
+                      6
+                    )} WETH to ETH`,
+                  });
                 } catch (error) {
                   console.error("Could not withdraw", error);
                 }
               }
             : undefined,
-        inputError: sufficientBalance ? undefined : "Insufficient WBNB balance",
+        inputError: sufficientBalance ? undefined : "Insufficient WETH balance",
       };
     }
     return NOT_APPLICABLE;
-  }, [wbnbContract, chainId, inputCurrency, outputCurrency, inputAmount, balance, addTransaction, callWithGasPrice]);
+  }, [
+    wbnbContract,
+    chainId,
+    inputCurrency,
+    outputCurrency,
+    inputAmount,
+    balance,
+    addTransaction,
+    callWithGasPrice,
+  ]);
 }

@@ -122,7 +122,7 @@ export default function CurrencyList({
   onCurrencySelect,
   otherCurrency,
   fixedListRef,
-  showBNB,
+  showETH,
   showImportView,
   setImportToken,
   breakIndex,
@@ -134,13 +134,13 @@ export default function CurrencyList({
   onCurrencySelect: (currency: Currency) => void;
   otherCurrency?: Currency | null;
   fixedListRef?: MutableRefObject<FixedSizeList | undefined>;
-  showBNB: boolean;
+  showETH: boolean;
   showImportView: () => void;
   setImportToken: (token: Token) => void;
   breakIndex: number | undefined;
 }) {
   const itemData: (Currency | undefined)[] = useMemo(() => {
-    let formatted: (Currency | undefined)[] = showBNB
+    let formatted: (Currency | undefined)[] = showETH
       ? [Currency.ETHER, ...currencies, ...inactiveCurrencies]
       : [...currencies, ...inactiveCurrencies];
     if (breakIndex !== undefined) {
@@ -151,7 +151,7 @@ export default function CurrencyList({
       ];
     }
     return formatted;
-  }, [breakIndex, currencies, inactiveCurrencies, showBNB]);
+  }, [breakIndex, currencies, inactiveCurrencies, showETH]);
 
   const { chainId } = useActiveWeb3React();
 

@@ -1,7 +1,7 @@
 import JSBI from "jsbi";
 import { Percent } from "../entities/fractions/percent";
 import { Token } from "../entities/token";
-import { mainnetTokens, testnetTokens } from "./tokens";
+import { mainnetTokens } from "./tokens";
 import { Address, RecognizedChainId } from "./types";
 
 export enum ChainId {
@@ -41,14 +41,12 @@ export const CUSTOM_BASES: {
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   [ChainId.MAINNET]: [
-    mainnetTokens.wbnb,
     mainnetTokens.busd,
     mainnetTokens.usdt,
-    mainnetTokens.btcb,
     mainnetTokens.eth,
     mainnetTokens.usdc,
   ],
-  [ChainId.TESTNET]: [testnetTokens.wbnb, testnetTokens.busd],
+  [ChainId.TESTNET]: [],
 };
 
 export const BASE_NETWORK_SCAN_URLS = {
@@ -116,11 +114,11 @@ export const BETTER_TRADE_LESS_HOPS_THRESHOLD = new Percent(
   JSBI.BigInt(10000)
 );
 
-// BNB
-export const DEFAULT_INPUT_CURRENCY = "BNB";
-// KRL
+// ETH
+export const DEFAULT_INPUT_CURRENCY = "ETH";
+// USDC
 export const DEFAULT_OUTPUT_CURRENCY =
-  "0xF1288cF18B1FAaA35F40111c3E5d2f827e1E920E";
+  "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
 
 // Gelato uses this address to define a native currency in all chains
 export const GELATO_NATIVE = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
@@ -131,11 +129,11 @@ export const ROUTER_ADDRESS = {
   [ChainId.TESTNET]: "",
 };
 
-// used to ensure the user doesn't send so much BNB so they end up with <.01
-export const MIN_BNB: JSBI = JSBI.exponentiate(
+// used to ensure the user doesn't send so much ETH so they end up with <.01
+export const MIN_ETH: JSBI = JSBI.exponentiate(
   JSBI.BigInt(10),
   JSBI.BigInt(16)
-); // .01 BNB
+); // .01 ETH
 
 // default allowed slippage, in bips
 export const INITIAL_ALLOWED_SLIPPAGE = 70;

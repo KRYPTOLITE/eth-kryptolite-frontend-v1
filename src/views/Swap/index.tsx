@@ -17,7 +17,10 @@ import { Trade } from "../../config/entities/trade";
 import { useAllTokens, useCurrency } from "../../hooks/Tokens";
 import { useIsTransactionUnsupported } from "../../hooks/Trades";
 import useActiveWeb3React from "../../hooks/useActiveWeb3React";
-import { ApprovalState, useApproveCallbackFromTrade } from "../../hooks/useApprovalCallback";
+import {
+  ApprovalState,
+  useApproveCallbackFromTrade,
+} from "../../hooks/useApprovalCallback";
 import { useSwapCallback } from "../../hooks/useSwapCallback";
 import useWrapCallback, { WrapType } from "../../hooks/useWrapCallback";
 import { Field } from "../../state/swap/actions";
@@ -29,7 +32,10 @@ import {
 } from "../../state/swap/hooks";
 import { useUserId, useUserSlippageTolerance } from "../../state/user/hooks";
 import { maxAmountSpend } from "../../utils/maxAmountSpend";
-import { computeTradePriceBreakdown, warningSeverity } from "../../utils/prices";
+import {
+  computeTradePriceBreakdown,
+  warningSeverity,
+} from "../../utils/prices";
 import shouldShowSwapWarning from "../../utils/shouldShowSwapWarning";
 import AdvancedSwapDetailsDropdown from "./components/AdvancedSwapDetailsDropdown";
 import confirmPriceImpactWithoutFee from "./components/ConfirmPriceImpactWithoutFee";
@@ -40,7 +46,10 @@ import TradePrice from "./components/TradePrice";
 import UnsupportedCurrencyFooter from "./components/UnsupportedCurrencyFooter";
 import useRefreshBlockNumberID from "./hooks/useRefreshBlockNumber";
 import { getSiteUrl } from "../../lib/hashAddress";
-import { getBep20Contract, getKrlRefereeTrackerContract } from "../../utils/contractHelpers";
+import {
+  getBep20Contract,
+  getKrlRefereeTrackerContract,
+} from "../../utils/contractHelpers";
 import BigNumber from "bignumber.js";
 import CurrencyLogo from "../../components/Logo/CurrencyLogo";
 import { BIG_TEN } from "../../utils/bigNumber";
@@ -55,8 +64,11 @@ export default function Swap() {
     useCurrency(loadedUrlParams?.outputCurrencyId),
   ];
   const urlLoadedTokens: Token[] = useMemo(
-    () => [loadedInputCurrency, loadedOutputCurrency]?.filter((c): c is Token => c instanceof Token) ?? [],
-    [loadedInputCurrency, loadedOutputCurrency],
+    () =>
+      [loadedInputCurrency, loadedOutputCurrency]?.filter(
+        (c): c is Token => c instanceof Token
+      ) ?? [],
+    [loadedInputCurrency, loadedOutputCurrency]
   );
 
   // dismiss warning if all imported tokens are in active lists
@@ -87,13 +99,22 @@ export default function Swap() {
     parsedAmount,
     currencies,
     inputError: swapInputError,
-  } = useDerivedSwapInfo(independentField, typedValue, inputCurrency, outputCurrency);
+  } = useDerivedSwapInfo(
+    independentField,
+    typedValue,
+    inputCurrency,
+    outputCurrency
+  );
 
   const {
     wrapType,
     execute: onWrap,
     inputError: wrapInputError,
-  } = useWrapCallback(currencies[Field.INPUT], currencies[Field.OUTPUT], typedValue);
+  } = useWrapCallback(
+    currencies[Field.INPUT],
+    currencies[Field.OUTPUT],
+    typedValue
+  );
   const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE;
   const trade = showWrap ? undefined : v2Trade;
 
@@ -103,29 +124,38 @@ export default function Swap() {
         [Field.OUTPUT]: parsedAmount,
       }
     : {
-        [Field.INPUT]: independentField === Field.INPUT ? parsedAmount : trade?.inputAmount,
-        [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : trade?.outputAmount,
+        [Field.INPUT]:
+          independentField === Field.INPUT ? parsedAmount : trade?.inputAmount,
+        [Field.OUTPUT]:
+          independentField === Field.OUTPUT
+            ? parsedAmount
+            : trade?.outputAmount,
       };
 
-  const { onSwitchTokens, onCurrencySelection, onUserInput } = useSwapActionHandlers();
+  const { onSwitchTokens, onCurrencySelection, onUserInput } =
+    useSwapActionHandlers();
   const isValid = !swapInputError;
-  const dependentField: Field = independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT;
+  const dependentField: Field =
+    independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT;
 
   const handleTypeInput = useCallback(
     (value: string) => {
       onUserInput(Field.INPUT, value);
     },
-    [onUserInput],
+    [onUserInput]
   );
   const handleTypeOutput = useCallback(
     (value: string) => {
       onUserInput(Field.OUTPUT, value);
     },
-    [onUserInput],
+    [onUserInput]
   );
 
   // modal and loading
-  const [{ tradeToConfirm, swapErrorMessage, attemptingTxn, txHash }, setSwapState] = useState<{
+  const [
+    { tradeToConfirm, swapErrorMessage, attemptingTxn, txHash },
+    setSwapState,
+  ] = useState<{
     tradeToConfirm: Trade | undefined;
     attemptingTxn: boolean;
     swapErrorMessage: string | undefined;
@@ -146,12 +176,17 @@ export default function Swap() {
 
   const route = trade?.route;
   const userHasSpecifiedInputOutput = Boolean(
-    currencies[Field.INPUT] && currencies[Field.OUTPUT] && parsedAmounts[independentField]?.greaterThan(JSBI.BigInt(0)),
+    currencies[Field.INPUT] &&
+      currencies[Field.OUTPUT] &&
+      parsedAmounts[independentField]?.greaterThan(JSBI.BigInt(0))
   );
   const noRoute = !route;
 
   // check whether the user has approved the router on the input token
-  const [approval, approveCallback] = useApproveCallbackFromTrade(trade, allowedSlippage);
+  const [approval, approveCallback] = useApproveCallbackFromTrade(
+    trade,
+    allowedSlippage
+  );
 
   // check if user has gone through approval process, used to show two step buttons, reset on token change
   const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false);
@@ -163,25 +198,45 @@ export default function Swap() {
     }
   }, [approval, approvalSubmitted]);
 
-  const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(currencyBalances[Field.INPUT]);
-  const atMaxAmountInput = Boolean(maxAmountInput && parsedAmounts[Field.INPUT]?.equalTo(maxAmountInput));
+  const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(
+    currencyBalances[Field.INPUT]
+  );
+  const atMaxAmountInput = Boolean(
+    maxAmountInput && parsedAmounts[Field.INPUT]?.equalTo(maxAmountInput)
+  );
 
   // the callback to execute the swap
-  const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(trade, allowedSlippage);
+  const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(
+    trade,
+    allowedSlippage
+  );
 
   const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade);
 
   const handleSwap = useCallback(() => {
-    if (priceImpactWithoutFee && !confirmPriceImpactWithoutFee(priceImpactWithoutFee)) {
+    if (
+      priceImpactWithoutFee &&
+      !confirmPriceImpactWithoutFee(priceImpactWithoutFee)
+    ) {
       return;
     }
     if (!swapCallback) {
       return;
     }
-    setSwapState({ attemptingTxn: true, tradeToConfirm, swapErrorMessage: undefined, txHash: undefined });
+    setSwapState({
+      attemptingTxn: true,
+      tradeToConfirm,
+      swapErrorMessage: undefined,
+      txHash: undefined,
+    });
     swapCallback()
       .then((hash) => {
-        setSwapState({ attemptingTxn: false, tradeToConfirm, swapErrorMessage: undefined, txHash: hash });
+        setSwapState({
+          attemptingTxn: false,
+          tradeToConfirm,
+          swapErrorMessage: undefined,
+          txHash: hash,
+        });
       })
       .catch((error) => {
         setSwapState({
@@ -217,12 +272,20 @@ export default function Swap() {
   }, [attemptingTxn, onUserInput, swapErrorMessage, tradeToConfirm, txHash]);
 
   const handleAcceptChanges = useCallback(() => {
-    setSwapState({ tradeToConfirm: trade, swapErrorMessage, txHash, attemptingTxn });
+    setSwapState({
+      tradeToConfirm: trade,
+      swapErrorMessage,
+      txHash,
+      attemptingTxn,
+    });
   }, [attemptingTxn, swapErrorMessage, trade, txHash]);
 
   // swap warning state
   const [swapWarningCurrency, setSwapWarningCurrency] = useState(null);
-  const [onPresentSwapWarningModal] = useModal(<SwapWarningModal swapCurrency={swapWarningCurrency} />, false);
+  const [onPresentSwapWarningModal] = useModal(
+    <SwapWarningModal swapCurrency={swapWarningCurrency} />,
+    false
+  );
 
   useEffect(() => {
     if (swapWarningCurrency) {
@@ -242,7 +305,7 @@ export default function Swap() {
         setSwapWarningCurrency(null);
       }
     },
-    [onCurrencySelection],
+    [onCurrencySelection]
   );
 
   const handleMaxInput = useCallback(() => {
@@ -262,13 +325,19 @@ export default function Swap() {
       }
     },
 
-    [onCurrencySelection],
+    [onCurrencySelection]
   );
 
-  const swapIsUnsupported = useIsTransactionUnsupported(currencies?.INPUT, currencies?.OUTPUT);
+  const swapIsUnsupported = useIsTransactionUnsupported(
+    currencies?.INPUT,
+    currencies?.OUTPUT
+  );
 
   const [onPresentImportTokenWarningModal] = useModal(
-    <ImportTokenWarningModal tokens={importTokensNotInDefault} onCancel={() => navigate("/swap")} />,
+    <ImportTokenWarningModal
+      tokens={importTokensNotInDefault}
+      onCancel={() => navigate("/swap")}
+    />
   );
 
   useEffect(() => {
@@ -292,7 +361,7 @@ export default function Swap() {
     />,
     true,
     true,
-    "confirmSwapModal",
+    "confirmSwapModal"
   );
 
   const hasAmount = Boolean(parsedAmount);
@@ -310,7 +379,9 @@ export default function Swap() {
     try {
       (async () => {
         if (account && library) {
-          const contract = getKrlRefereeTrackerContract(library.getSigner(account));
+          const contract = getKrlRefereeTrackerContract(
+            library.getSigner(account)
+          );
           const { _hex } = await contract.referralCount(account);
           const count = new BigNumber(_hex).toNumber();
           setReferralCount(count);
@@ -322,21 +393,34 @@ export default function Swap() {
     }
   }, [account, library]);
 
-  const USDTCurrency = useCurrency("0x55d398326f99059fF775485246999027B3197955");
-  const { v2Trade: tradeWithUSD } = useDerivedSwapInfo(Field.INPUT, "1", USDTCurrency, currencies[Field.OUTPUT]);
+  const USDTCurrency = useCurrency(
+    "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+  );
+  const { v2Trade: tradeWithUSD } = useDerivedSwapInfo(
+    Field.INPUT,
+    "1",
+    USDTCurrency,
+    currencies[Field.OUTPUT]
+  );
   const [totalSupply, setTotalSupply] = useState("0");
   const [marketCap, setMarketCap] = useState("-");
 
   useEffect(() => {
     const currency = currencies[Field.OUTPUT];
-    // Just a hack to replace BNB with wbnb address
-    const outCurrency = outputCurrencyId === "BNB" ? "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c" : outputCurrencyId;
+    // Just a hack to replace ETH with wbnb address
+    const outCurrency =
+      outputCurrencyId === "ETH"
+        ? "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+        : outputCurrencyId;
 
     (async () => {
       if (outCurrency && currency) {
         const contract = getBep20Contract(outCurrency);
         const { _hex: ts } = await contract.totalSupply();
-        const totalSupply = new BigNumber(ts).div(BIG_TEN.pow(currency.decimals)).toNumber().toLocaleString();
+        const totalSupply = new BigNumber(ts)
+          .div(BIG_TEN.pow(currency.decimals))
+          .toNumber()
+          .toLocaleString();
         setTotalSupply(totalSupply);
       }
     })();
@@ -350,12 +434,14 @@ export default function Swap() {
           ? tradeWithUSD.executionPrice.toSignificant(6)
           : tradeWithUSD.executionPrice.invert()?.toSignificant(6);
 
-        // Just a hack to replace BNB with wbnb address
+        // Just a hack to replace ETH with wbnb address
         const outCurrency =
-          outputCurrencyId === "BNB" ? "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c" : outputCurrencyId;
+          outputCurrencyId === "ETH"
+            ? "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
+            : outputCurrencyId;
 
         fetch(
-          `https://api.bscscan.com/api?module=stats&action=tokenCsupply&contractaddress=${outCurrency}&apikey=${process.env.GATSBY_BINANCE_API_KEY}`,
+          `https://api.bscscan.com/api?module=stats&action=tokenCsupply&contractaddress=${outCurrency}&apikey=${process.env.GATSBY_BINANCE_API_KEY}`
         ).then(async (res) => {
           const apiResponse = await res.json();
           const mc = new BigNumber(apiResponse.result)
@@ -372,18 +458,30 @@ export default function Swap() {
     };
 
     getMarketCap();
-  }, [outputCurrencyId, currencies[Field.OUTPUT], tradeWithUSD?.executionPrice, showInverted]);
+  }, [
+    outputCurrencyId,
+    currencies[Field.OUTPUT],
+    tradeWithUSD?.executionPrice,
+    showInverted,
+  ]);
 
   const TokenInfoCard = useMemo(
     () =>
       ({ className }: { className?: string }) =>
         (
-          <div className={classNames("p-3 shadow-md rounded-md border text-sm h-full bg-white", className)}>
+          <div
+            className={classNames(
+              "p-3 shadow-md rounded-md border text-sm h-full bg-white",
+              className
+            )}
+          >
             <div className="flex gap-3 items-center mb-5">
               {/* <img src="" alt="Kryptolite logo" className="w-10 h-10 bg-gray-500 overflow-hidden" /> */}
               <CurrencyLogo currency={currencies[Field.OUTPUT]} />
               <div>
-                <h3 className="-mb-0.5 text-sm">{currencies[Field.OUTPUT]?.name} Token Info</h3>
+                <h3 className="-mb-0.5 text-sm">
+                  {currencies[Field.OUTPUT]?.name} Token Info
+                </h3>
                 <p className="text-xs">{currencies[Field.OUTPUT]?.symbol}</p>
               </div>
             </div>
@@ -417,7 +515,7 @@ export default function Swap() {
       marketCap,
       totalSupply,
       isLoading,
-    ],
+    ]
   );
 
   const [onPresentTransactionsModal] = useModal(<TokenInfoCard />);
@@ -437,7 +535,11 @@ export default function Swap() {
             <div id="swap-page" style={{ minHeight: "412px" }}>
               <div className="flex flex-col gap-4">
                 <CurrencyInputPanel
-                  label={independentField === Field.OUTPUT && !showWrap && trade ? "From (estimated)" : "From"}
+                  label={
+                    independentField === Field.OUTPUT && !showWrap && trade
+                      ? "From (estimated)"
+                      : "From"
+                  }
                   value={formattedAmounts[Field.INPUT]}
                   showMaxButton={!atMaxAmountInput}
                   currency={currencies[Field.INPUT]}
@@ -448,7 +550,10 @@ export default function Swap() {
                   id="swap-currency-input"
                 />
                 <div className="flex flex-col justify-around">
-                  <div className="flex justify-center" style={{ padding: "0 1rem" }}>
+                  <div
+                    className="flex justify-center"
+                    style={{ padding: "0 1rem" }}
+                  >
                     <Button
                       variant="outline"
                       className="shadow-sm text-xs py-1"
@@ -464,7 +569,11 @@ export default function Swap() {
                 <CurrencyInputPanel
                   value={formattedAmounts[Field.OUTPUT]}
                   onUserInput={handleTypeOutput}
-                  label={independentField === Field.INPUT && !showWrap && trade ? "To (estimated)" : "To"}
+                  label={
+                    independentField === Field.INPUT && !showWrap && trade
+                      ? "To (estimated)"
+                      : "To"
+                  }
                   showMaxButton={false}
                   currency={currencies[Field.OUTPUT]}
                   onCurrencySelect={handleOutputSelect}
@@ -473,7 +582,10 @@ export default function Swap() {
                 />
                 <SlippageTabs />
                 {showWrap ? null : (
-                  <div className="flex flex-col gap-2" style={{ padding: "0 16px" }}>
+                  <div
+                    className="flex flex-col gap-2"
+                    style={{ padding: "0 16px" }}
+                  >
                     <div className="flex gap-2 text-sm items-baseline">
                       {Boolean(trade) && (
                         <Fragment>
@@ -504,32 +616,57 @@ export default function Swap() {
                 ) : !account ? (
                   <ConnectWalletButton className="w-full" />
                 ) : showWrap ? (
-                  <Button className="w-full" disabled={Boolean(wrapInputError)} onClick={onWrap}>
+                  <Button
+                    className="w-full"
+                    disabled={Boolean(wrapInputError)}
+                    onClick={onWrap}
+                  >
                     {wrapInputError ??
-                      (wrapType === WrapType.WRAP ? "Wrap" : wrapType === WrapType.UNWRAP ? "Unwrap" : null)}
+                      (wrapType === WrapType.WRAP
+                        ? "Wrap"
+                        : wrapType === WrapType.UNWRAP
+                        ? "Unwrap"
+                        : null)}
                   </Button>
                 ) : noRoute && userHasSpecifiedInputOutput ? (
-                  <div className="bg-gray-100" style={{ textAlign: "center", padding: "0.75rem" }}>
+                  <div
+                    className="bg-gray-100"
+                    style={{ textAlign: "center", padding: "0.75rem" }}
+                  >
                     <p>Insufficient liquidity for this trade.</p>
                   </div>
                 ) : showApproveFlow ? (
                   <div className="flex justify-between">
                     <Button
-                      variant={approval === ApprovalState.APPROVED ? "primary" : "danger"}
+                      variant={
+                        approval === ApprovalState.APPROVED
+                          ? "primary"
+                          : "danger"
+                      }
                       onClick={approveCallback}
-                      disabled={approval !== ApprovalState.NOT_APPROVED || approvalSubmitted}
+                      disabled={
+                        approval !== ApprovalState.NOT_APPROVED ||
+                        approvalSubmitted
+                      }
                       className="w-[48%] text-sm"
                     >
                       {approval === ApprovalState.PENDING ? (
-                        <div className="flex gap-1 justify-center">{"Enabling..."}</div>
-                      ) : approvalSubmitted && approval === ApprovalState.APPROVED ? (
+                        <div className="flex gap-1 justify-center">
+                          {"Enabling..."}
+                        </div>
+                      ) : approvalSubmitted &&
+                        approval === ApprovalState.APPROVED ? (
                         "Enabled"
                       ) : (
                         `Enable ${currencies[Field.INPUT]?.symbol ?? ""}`
                       )}
                     </Button>
                     <Button
-                      variant={isValid && priceImpactSeverity > 2 ? "danger" : "primary"}
+                      variant={
+                        isValid && priceImpactSeverity > 2
+                          ? "danger"
+                          : "primary"
+                      }
                       onClick={() => {
                         setSwapState({
                           tradeToConfirm: trade,
@@ -541,14 +678,26 @@ export default function Swap() {
                       }}
                       className="w-[48%] text-sm"
                       id="swap-button"
-                      disabled={!isValid || approval !== ApprovalState.APPROVED || priceImpactSeverity > 3}
+                      disabled={
+                        !isValid ||
+                        approval !== ApprovalState.APPROVED ||
+                        priceImpactSeverity > 3
+                      }
                     >
-                      {priceImpactSeverity > 3 ? "Price Impact High" : priceImpactSeverity > 2 ? "Swap Anyway" : "Swap"}
+                      {priceImpactSeverity > 3
+                        ? "Price Impact High"
+                        : priceImpactSeverity > 2
+                        ? "Swap Anyway"
+                        : "Swap"}
                     </Button>
                   </div>
                 ) : (
                   <Button
-                    variant={isValid && priceImpactSeverity > 2 && !swapCallbackError ? "danger" : "primary"}
+                    variant={
+                      isValid && priceImpactSeverity > 2 && !swapCallbackError
+                        ? "danger"
+                        : "primary"
+                    }
                     onClick={() => {
                       setSwapState({
                         tradeToConfirm: trade,
@@ -560,7 +709,9 @@ export default function Swap() {
                     }}
                     id="swap-button"
                     className="w-full text-sm"
-                    disabled={!isValid || priceImpactSeverity > 3 || !!swapCallbackError}
+                    disabled={
+                      !isValid || priceImpactSeverity > 3 || !!swapCallbackError
+                    }
                   >
                     {swapInputError ||
                       (priceImpactSeverity > 3
@@ -575,13 +726,18 @@ export default function Swap() {
             {!swapIsUnsupported ? (
               trade && <AdvancedSwapDetailsDropdown trade={trade} />
             ) : (
-              <UnsupportedCurrencyFooter currencies={[currencies.INPUT, currencies.OUTPUT]} />
+              <UnsupportedCurrencyFooter
+                currencies={[currencies.INPUT, currencies.OUTPUT]}
+              />
             )}
           </div>
           <div className="w-full max-w-sm space-y-10 flex flex-col justify-between">
             <TokenInfoCard className="hidden md:block" />
             <div className="p-3 shadow-md rounded-md border text-sm h-full">
-              <p>Refer a friend to trade on KryptoliteSwap and earn tokens from every trade they do.</p>
+              <p>
+                Refer a friend to trade on KryptoliteSwap and earn tokens from
+                every trade they do.
+              </p>
               <ol className="list-inside list-decimal my-3 text-gray-600">
                 <li>Generate your referral link</li>
                 <li>Invite your friends to trade</li>
@@ -590,14 +746,20 @@ export default function Swap() {
               {
                 <CopyToClipboard
                   canCopy={active}
-                  content={active ? `${getSiteUrl()}/swap?ul=${userId}` : "Connect your wallet"}
+                  content={
+                    active
+                      ? `${getSiteUrl()}/swap?ul=${userId}`
+                      : "Connect your wallet"
+                  }
                 />
               }
               <p className="my-2">Share your referral link</p>
               <div className="border-t mt-5 pt-5">
                 <h3>Total referrals:</h3>
                 <p className="text-gray-500">
-                  {referralCount === 0 ? "No referral yet" : referralCount + " Total referrals"}{" "}
+                  {referralCount === 0
+                    ? "No referral yet"
+                    : referralCount + " Total referrals"}{" "}
                 </p>
               </div>
             </div>

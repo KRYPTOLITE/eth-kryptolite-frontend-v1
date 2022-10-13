@@ -71,11 +71,11 @@ export function currencyEquals(
 export const WETH = {
   [ChainId.MAINNET]: new Token(
     ChainId.MAINNET,
-    "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+    "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
     18,
-    "WBNB",
-    "Wrapped BNB",
-    "https://www.binance.org"
+    "ETH",
+    "Ethereum Token",
+    "https://ethereum.org/en/"
   ),
   [ChainId.TESTNET]: new Token(
     ChainId.TESTNET,

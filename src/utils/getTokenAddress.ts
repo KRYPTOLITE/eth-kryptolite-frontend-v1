@@ -1,7 +1,7 @@
-// BNB Address
-const BNB_ADDRESS = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
+// ETH Address
+const ETH_ADDRESS = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
 
-export { BNB_ADDRESS };
+export { ETH_ADDRESS };
 
 export const getTokenAddress = (tokenAddress: undefined | string) => {
   if (!tokenAddress) {
@@ -9,7 +9,7 @@ export const getTokenAddress = (tokenAddress: undefined | string) => {
   }
   const lowerCaseAddress = tokenAddress.toLowerCase();
   if (lowerCaseAddress === "bnb") {
-    return BNB_ADDRESS;
+    return ETH_ADDRESS;
   }
 
   return lowerCaseAddress;

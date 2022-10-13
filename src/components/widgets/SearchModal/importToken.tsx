@@ -33,21 +33,24 @@ function ImportToken({ tokens, handleCurrencySelect }: ImportProps) {
           Please confirm your import!
           <br />
           <br />
-          This token is not listed on KryptoliteSwap . By adding it as a custom token, you confirm that you're trading
-          with it at your own risk.
+          This token is not listed on KryptoliteSwap . By adding it as a custom
+          token, you confirm that you're trading with it at your own risk.
         </MessageText>
       </Message>
 
       {tokens.map((token) => {
         //@ts-ignore
-        const list = chainId && inactiveTokenList?.[chainId]?.[token.address]?.list;
+        const list =
+          chainId && inactiveTokenList?.[chainId]?.[token.address]?.list;
         const address = token.address ? `${truncateHash(token.address)}` : null;
         return (
           <div key={token.address} className="grid gap-1">
             {list !== undefined ? (
               <div className="p-2 text-base my-1">via {list.name}</div>
             ) : (
-              <div className="text-red-500 text-xs my-2">This token is from an unknown source</div>
+              <div className="text-red-500 text-xs my-2">
+                This token is from an unknown source
+              </div>
             )}
             <div className="flex items-center font-medium">
               <p className="mr-2">{token.name}</p>
@@ -56,8 +59,11 @@ function ImportToken({ tokens, handleCurrencySelect }: ImportProps) {
             {chainId && (
               <div className="flex items-center justify-between w-full text-base">
                 <p className="mr-1">{address}</p>
-                <Link to={getBscScanLink(token.address, "address", chainId)} className="font-medium text-blue-600">
-                  (View on BscScan)
+                <Link
+                  to={getBscScanLink(token.address, "address", chainId)}
+                  className="font-medium text-blue-600"
+                >
+                  (View on Etherscan)
                 </Link>
               </div>
             )}
@@ -66,9 +72,20 @@ function ImportToken({ tokens, handleCurrencySelect }: ImportProps) {
       })}
 
       <div className="flex justify-between items-center mt-2">
-        <div className="flex items-center" onClick={() => setConfirmed(!confirmed)}>
-          <Checkbox scale="sm" name="confirmed" checked={confirmed} onChange={() => setConfirmed(!confirmed)} />
-          <p className="ml-2 text-sm font-medium" style={{ userSelect: "none" }}>
+        <div
+          className="flex items-center"
+          onClick={() => setConfirmed(!confirmed)}
+        >
+          <Checkbox
+            scale="sm"
+            name="confirmed"
+            checked={confirmed}
+            onChange={() => setConfirmed(!confirmed)}
+          />
+          <p
+            className="ml-2 text-sm font-medium"
+            style={{ userSelect: "none" }}
+          >
             I understand
           </p>
         </div>

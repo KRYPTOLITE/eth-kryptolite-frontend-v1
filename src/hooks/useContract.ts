@@ -80,7 +80,7 @@ export function useTokenContract(
   return useContract(tokenAddress, ERC20_ABI, withSignerIfPossible);
 }
 
-export function useWBNBContract(
+export function useWETHContract(
   withSignerIfPossible?: boolean
 ): Contract | null {
   const { chainId } = useActiveWeb3React();

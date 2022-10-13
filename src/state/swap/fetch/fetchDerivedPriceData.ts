@@ -1,16 +1,22 @@
 import orderBy from "lodash/orderBy";
 import { Block } from "../../info/types";
 import { getUnixTime, startOfHour, sub } from "date-fns";
-import { getDerivedPrices, getDerivedPricesQueryConstructor } from "../queries/getDerivedPrices";
+import {
+  getDerivedPrices,
+  getDerivedPricesQueryConstructor,
+} from "../queries/getDerivedPrices";
 import { PairDataTimeWindowEnum } from "../types";
 import { ONE_DAY_UNIX, ONE_HOUR_SECONDS } from "../../../config/constants/info";
 
-const getTokenDerivedBnbPrices = async (tokenAddress: string, blocks: Block[]) => {
+const getTokenDerivedBnbPrices = async (
+  tokenAddress: string,
+  blocks: Block[]
+) => {
   const prices: any | undefined = await multiQuery(
     getDerivedPricesQueryConstructor,
     getDerivedPrices(tokenAddress, blocks),
     INFO_CLIENT,
-    200,
+    200
   );
 
   if (!prices) {
@@ -18,26 +24,30 @@ const getTokenDerivedBnbPrices = async (tokenAddress: string, blocks: Block[]) =
     return null;
   }
 
-  // format token BNB price results
+  // format token ETH price results
   const tokenPrices: {
     tokenAddress: string;
     timestamp: string;
-    derivedBNB: number;
+    derivedETH: number;
   }[] = [];
 
-  // Get Token prices in BNB
+  // Get Token prices in ETH
   Object.keys(prices).forEach((priceKey) => {
     const timestamp = priceKey.split("t")[1];
     if (timestamp) {
       tokenPrices.push({
         tokenAddress,
         timestamp,
-        derivedBNB: prices[priceKey]?.derivedBNB ? parseFloat(prices[priceKey].derivedBNB) : 0,
+        derivedETH: prices[priceKey]?.derivedETH
+          ? parseFloat(prices[priceKey].derivedETH)
+          : 0,
       });
     }
   });
 
-  return orderBy(tokenPrices, (tokenPrice) => parseInt(tokenPrice.timestamp, 10));
+  return orderBy(tokenPrices, (tokenPrice) =>
+    parseInt(tokenPrice.timestamp, 10)
+  );
 };
 
 const getInterval = (timeWindow: PairDataTimeWindowEnum) => {
@@ -75,11 +85,15 @@ const getSkipDaysToStart = (timeWindow: PairDataTimeWindowEnum) => {
 const fetchDerivedPriceData = async (
   token0Address: string,
   token1Address: string,
-  timeWindow: PairDataTimeWindowEnum,
+  timeWindow: PairDataTimeWindowEnum
 ) => {
   const interval = getInterval(timeWindow);
   const endTimestamp = getUnixTime(new Date());
-  const startTimestamp = getUnixTime(startOfHour(sub(endTimestamp * 1000, { days: getSkipDaysToStart(timeWindow) })));
+  const startTimestamp = getUnixTime(
+    startOfHour(
+      sub(endTimestamp * 1000, { days: getSkipDaysToStart(timeWindow) })
+    )
+  );
   const timestamps = [];
   let time = startTimestamp;
   while (time <= endTimestamp) {

@@ -5,7 +5,7 @@ import useHttpLocations from "../../hooks/useHttpLocations";
 import { WrappedTokenInfo } from "../../state/types";
 import getTokenLogoURL from "../../utils/getTokenLogoUrl";
 import Logo from "./index";
-import BinanceIcon from "../Svg/Icons/Binance";
+import EthereumIcon from "../Svg/Icons/Ethereum";
 
 export default function CurrencyLogo({
   currency,
@@ -16,10 +16,12 @@ export default function CurrencyLogo({
   size?: string;
   style?: React.CSSProperties;
 }) {
-  const uriLocations = useHttpLocations(currency instanceof WrappedTokenInfo ? currency.logoURI : undefined);
+  const uriLocations = useHttpLocations(
+    currency instanceof WrappedTokenInfo ? currency.logoURI : undefined
+  );
 
   const srcs: string[] = useMemo(() => {
-    if (currency === ETHER) return [];
+    // if (currency === ETHER) return [];
 
     if (currency instanceof Token) {
       if (currency instanceof WrappedTokenInfo) {
@@ -31,7 +33,7 @@ export default function CurrencyLogo({
   }, [currency, uriLocations]);
 
   if (currency === ETHER) {
-    return <BinanceIcon className="flex-none" width={size} style={style} />;
+    return <EthereumIcon className="flex-none" width={size} style={style} />;
   }
 
   return (

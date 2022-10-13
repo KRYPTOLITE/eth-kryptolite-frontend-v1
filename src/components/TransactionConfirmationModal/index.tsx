@@ -60,7 +60,7 @@ export function TransactionSubmittedContent({
             className="text-sm"
             to={getBscScanLink(hash, "transaction", chainId)}
           >
-            View on BscScan
+            View on Etherscan
           </Link>
         )}
         {currencyToAdd && library?.provider?.isMetaMask && token && (

@@ -62,14 +62,21 @@ export abstract class Router {
    * @param trade to produce call parameters for
    * @param options options for the call parameters
    */
-  public static swapCallParameters(trade: Trade, options: TradeOptions): SwapParameters {
+  public static swapCallParameters(
+    trade: Trade,
+    options: TradeOptions
+  ): SwapParameters {
     const etherIn = trade.inputAmount.currency === ETHER;
     const etherOut = trade.outputAmount.currency === ETHER;
     // the router does not support both ether in and out
     invariant(!(etherIn && etherOut), "ETHER_IN_OUT");
 
-    const amountIn: string = toHex(trade.maximumAmountIn(options.allowedSlippage));
-    const amountOut: string = toHex(trade.minimumAmountOut(options.allowedSlippage));
+    const amountIn: string = toHex(
+      trade.maximumAmountIn(options.allowedSlippage)
+    );
+    const amountOut: string = toHex(
+      trade.minimumAmountOut(options.allowedSlippage)
+    );
     const refAddress = options.referrer;
     const path: string[] = trade.route.path.map((token) => token.address);
 
@@ -85,21 +92,35 @@ export abstract class Router {
             ? "swapExactETHForTokensSupportingFeeOnTransferTokens"
             : "swapExactETHForTokens";
 
-          args = [["0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73", refAddress, true], amountOut, path];
+          args = [
+            ["0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f", refAddress, true],
+            amountOut,
+            path,
+          ];
           value = amountIn;
         } else if (etherOut) {
           methodName = useFeeOnTransfer
             ? "swapExactTokensForETHSupportingFeeOnTransferTokens"
             : "swapExactTokensForETH";
 
-          args = [["0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73", refAddress, true], amountIn, amountOut, path];
+          args = [
+            ["0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f", refAddress, true],
+            amountIn,
+            amountOut,
+            path,
+          ];
           value = ZERO_HEX;
         } else {
           methodName = useFeeOnTransfer
             ? "swapExactTokensForTokensSupportingFeeOnTransferTokens"
             : "swapExactTokensForTokens";
 
-          args = [["0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73", refAddress, true], amountIn, amountOut, path];
+          args = [
+            ["0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f", refAddress, true],
+            amountIn,
+            amountOut,
+            path,
+          ];
           value = ZERO_HEX;
         }
         break;
@@ -108,17 +129,31 @@ export abstract class Router {
         if (etherIn) {
           methodName = "swapETHForExactTokens";
 
-          args = [["0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73", refAddress, true], amountOut, path];
+          args = [
+            ["0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f", refAddress, true],
+            amountOut,
+            path,
+          ];
           value = amountIn;
         } else if (etherOut) {
           methodName = "swapTokensForExactETH";
 
-          args = [["0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73", refAddress, true], amountOut, amountIn, path];
+          args = [
+            ["0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f", refAddress, true],
+            amountOut,
+            amountIn,
+            path,
+          ];
           value = ZERO_HEX;
         } else {
           methodName = "swapTokensForExactTokens";
 
-          args = [["0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73", refAddress, true], amountOut, amountIn, path];
+          args = [
+            ["0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f", refAddress, true],
+            amountOut,
+            amountIn,
+            path,
+          ];
           value = ZERO_HEX;
         }
         break;

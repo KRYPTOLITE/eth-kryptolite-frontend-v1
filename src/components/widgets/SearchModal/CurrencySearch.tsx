@@ -110,9 +110,9 @@ function CurrencySearch({
   const searchToken = useToken(debouncedQuery);
   const searchTokenIsAdded = useIsUserAddedToken(searchToken);
 
-  const showBNB: boolean = useMemo(() => {
+  const showETH: boolean = useMemo(() => {
     const s = debouncedQuery.toLowerCase().trim();
-    return s === "" || s === "b" || s === "bn" || s === "bnb";
+    return s === "" || s === "e" || s === "et" || s === "eth";
   }, [debouncedQuery]);
 
   const filteredTokens: Token[] = useMemo(() => {
@@ -195,7 +195,7 @@ function CurrencySearch({
       <div className="my-3 -mx-6">
         <CurrencyList
           height={390}
-          showBNB={showBNB}
+          showETH={showETH}
           currencies={filteredSortedTokens}
           inactiveCurrencies={filteredInactiveTokens}
           breakIndex={
@@ -226,7 +226,7 @@ function CurrencySearch({
     searchTokenIsAdded,
     selectedCurrency,
     setImportToken,
-    showBNB,
+    showETH,
     showImportView,
   ]);
 
