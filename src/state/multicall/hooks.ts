@@ -22,7 +22,9 @@ export interface Result extends ReadonlyArray<any> {
 type MethodArg = string | number | BigNumber;
 type MethodArgs = Array<MethodArg | MethodArg[]>;
 
-type OptionalMethodInputs = Array<MethodArg | MethodArg[] | undefined> | undefined;
+type OptionalMethodInputs =
+  | Array<MethodArg | MethodArg[] | undefined>
+  | undefined;
 
 function isMethodArg(x: unknown): x is MethodArg {
   return ["string", "number"].indexOf(typeof x) !== -1;
@@ -31,7 +33,10 @@ function isMethodArg(x: unknown): x is MethodArg {
 function isValidMethodArgs(x: unknown): x is MethodArgs | undefined {
   return (
     x === undefined ||
-    (Array.isArray(x) && x.every((xi) => isMethodArg(xi) || (Array.isArray(xi) && xi.every(isMethodArg))))
+    (Array.isArray(x) &&
+      x.every(
+        (xi) => isMethodArg(xi) || (Array.isArray(xi) && xi.every(isMethodArg))
+      ))
   );
 }
 
@@ -41,7 +46,11 @@ interface CallResult {
   readonly blockNumber: number | undefined;
 }
 
-const INVALID_RESULT: CallResult = { valid: false, blockNumber: undefined, data: undefined };
+const INVALID_RESULT: CallResult = {
+  valid: false,
+  blockNumber: undefined,
+  data: undefined,
+};
 
 // use this options object
 export const NEVER_RELOAD: ListenerOptions = {
@@ -49,11 +58,15 @@ export const NEVER_RELOAD: ListenerOptions = {
 };
 
 // the lowest level call for subscribing to contract data
-function useCallsData(calls: (Call | undefined)[], options?: ListenerOptions): CallResult[] {
+function useCallsData(
+  calls: (Call | undefined)[],
+  options?: ListenerOptions
+): CallResult[] {
   const { chainId } = useActiveWeb3React();
-  const callResults = useSelector<AppState, AppState["multicall"]["callResults"]>(
-    (state) => state.multicall.callResults,
-  );
+  const callResults = useSelector<
+    AppState,
+    AppState["multicall"]["callResults"]
+  >((state) => state.multicall.callResults);
   const dispatch = useDispatch<AppDispatch>();
 
   const serializedCallKeys: string = useMemo(
@@ -62,9 +75,9 @@ function useCallsData(calls: (Call | undefined)[], options?: ListenerOptions): C
         calls
           ?.filter((c): c is Call => Boolean(c))
           ?.map(toCallKey)
-          ?.sort() ?? [],
+          ?.sort() ?? []
       ),
-    [calls],
+    [calls]
   );
 
   // update listeners when there is an actual change that persists for at least 100ms
@@ -78,7 +91,7 @@ function useCallsData(calls: (Call | undefined)[], options?: ListenerOptions): C
         chainId,
         calls,
         options,
-      }),
+      })
     );
 
     return () => {
@@ -87,7 +100,7 @@ function useCallsData(calls: (Call | undefined)[], options?: ListenerOptions): C
           chainId,
           calls,
           options,
-        }),
+        })
       );
     };
   }, [chainId, dispatch, options, serializedCallKeys]);
@@ -106,7 +119,7 @@ function useCallsData(calls: (Call | undefined)[], options?: ListenerOptions): C
 
         return { valid: true, data, blockNumber: result?.blockNumber };
       }),
-    [callResults, calls, chainId],
+    [callResults, calls, chainId]
   );
 }
 
@@ -122,20 +135,33 @@ interface CallState {
   readonly error: boolean;
 }
 
-const INVALID_CALL_STATE: CallState = { valid: false, result: undefined, loading: false, syncing: false, error: false };
-const LOADING_CALL_STATE: CallState = { valid: true, result: undefined, loading: true, syncing: true, error: false };
+const INVALID_CALL_STATE: CallState = {
+  valid: false,
+  result: undefined,
+  loading: false,
+  syncing: false,
+  error: false,
+};
+const LOADING_CALL_STATE: CallState = {
+  valid: true,
+  result: undefined,
+  loading: true,
+  syncing: true,
+  error: false,
+};
 
 function toCallState(
   callResult: CallResult | undefined,
   contractInterface: Interface | undefined,
   fragment: FunctionFragment | undefined,
-  latestBlockNumber: number | undefined,
+  latestBlockNumber: number | undefined
 ): CallState {
   if (!callResult) return INVALID_CALL_STATE;
   const { valid, data, blockNumber } = callResult;
   if (!valid) return INVALID_CALL_STATE;
   if (valid && !blockNumber) return LOADING_CALL_STATE;
-  if (!contractInterface || !fragment || !latestBlockNumber) return LOADING_CALL_STATE;
+  if (!contractInterface || !fragment || !latestBlockNumber)
+    return LOADING_CALL_STATE;
   const success = data && data.length > 2;
   const syncing = (blockNumber ?? 0) < latestBlockNumber;
   let result: Result | undefined;
@@ -166,9 +192,12 @@ export function useSingleContractMultipleData(
   contract: Contract | null | undefined,
   methodName: string,
   callInputs: OptionalMethodInputs[],
-  options?: ListenerOptions,
+  options?: ListenerOptions
 ): CallState[] {
-  const fragment = useMemo(() => contract?.interface?.getFunction(methodName), [contract, methodName]);
+  const fragment = useMemo(
+    () => contract?.interface?.getFunction(methodName),
+    [contract, methodName]
+  );
 
   const calls = useMemo(
     () =>
@@ -180,7 +209,7 @@ export function useSingleContractMultipleData(
             };
           })
         : [],
-    [callInputs, contract, fragment],
+    [callInputs, contract, fragment]
   );
 
   const results = useCallsData(calls, options);
@@ -189,7 +218,9 @@ export function useSingleContractMultipleData(
 
   return useMemo(() => {
     const currentBlockNumber = cache.get("blockNumber");
-    return results.map((result) => toCallState(result, contract?.interface, fragment, currentBlockNumber));
+    return results.map((result) =>
+      toCallState(result, contract?.interface, fragment, currentBlockNumber)
+    );
   }, [fragment, contract, results, cache]);
 }
 
@@ -198,11 +229,13 @@ export function useMultipleContractSingleData(
   contractInterface: Interface,
   methodName: string,
   callInputs?: OptionalMethodInputs,
-  options?: ListenerOptions,
+  options?: ListenerOptions
 ): CallState[] {
   const fragment = useMemo(
-    () => contractInterface.getFunction && contractInterface.getFunction(methodName),
-    [contractInterface, methodName],
+    () =>
+      contractInterface.getFunction &&
+      contractInterface.getFunction(methodName),
+    [contractInterface, methodName]
   );
 
   const callData: string | undefined = useMemo(
@@ -210,8 +243,10 @@ export function useMultipleContractSingleData(
       fragment && isValidMethodArgs(callInputs)
         ? contractInterface.encodeFunctionData(fragment, callInputs)
         : undefined,
-    [callInputs, contractInterface, fragment],
+    [callInputs, contractInterface, fragment]
   );
+
+  console.log(callData);
 
   const calls = useMemo(
     () =>
@@ -225,7 +260,7 @@ export function useMultipleContractSingleData(
               : undefined;
           })
         : [],
-    [addresses, callData, fragment],
+    [addresses, callData, fragment]
   );
 
   const results = useCallsData(calls, options);
@@ -234,7 +269,9 @@ export function useMultipleContractSingleData(
 
   return useMemo(() => {
     const currentBlockNumber = cache.get("blockNumber");
-    return results.map((result) => toCallState(result, contractInterface, fragment, currentBlockNumber));
+    return results.map((result) =>
+      toCallState(result, contractInterface, fragment, currentBlockNumber)
+    );
   }, [fragment, results, contractInterface, cache]);
 }
 
@@ -242,9 +279,12 @@ export function useSingleCallResult(
   contract: Contract | null | undefined,
   methodName: string,
   inputs?: OptionalMethodInputs,
-  options?: ListenerOptions,
+  options?: ListenerOptions
 ): CallState {
-  const fragment = useMemo(() => contract?.interface?.getFunction(methodName), [contract, methodName]);
+  const fragment = useMemo(
+    () => contract?.interface?.getFunction(methodName),
+    [contract, methodName]
+  );
 
   const calls = useMemo<Call[]>(() => {
     return contract && fragment && isValidMethodArgs(inputs)
@@ -262,6 +302,11 @@ export function useSingleCallResult(
 
   return useMemo(() => {
     const currentBlockNumber = cache.get("blockNumber");
-    return toCallState(result, contract?.interface, fragment, currentBlockNumber);
+    return toCallState(
+      result,
+      contract?.interface,
+      fragment,
+      currentBlockNumber
+    );
   }, [cache, result, contract?.interface, fragment]);
 }

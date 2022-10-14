@@ -32,6 +32,22 @@ export const mainnetTokens = defineTokens({
     "Tether USD",
     "https://tether.to/"
   ),
+  weth: new Token(
+    MAINNET,
+    "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+    18,
+    "WETH",
+    "Wrapped Ether",
+    "https://weth.io/"
+  ),
+  bnb: new Token(
+    MAINNET,
+    "0xB8c77482e45F1F44dE1745F52C74426C631bDD52",
+    18,
+    "BNB",
+    "BNB",
+    "https://www.binance.com/"
+  ),
   eth: new Token(
     MAINNET,
     "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
@@ -47,6 +63,14 @@ export const mainnetTokens = defineTokens({
     "USDC",
     "USD Coin",
     "https://www.centre.io/usdc"
+  ),
+  wbtc: new Token(
+    MAINNET,
+    "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+    8,
+    "WBTC",
+    "Wrapped BTC",
+    "https://www.wbtc.network/"
   ),
 });
 

@@ -41,10 +41,12 @@ export const CUSTOM_BASES: {
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   [ChainId.MAINNET]: [
+    mainnetTokens.weth,
     mainnetTokens.busd,
     mainnetTokens.usdt,
-    mainnetTokens.eth,
     mainnetTokens.usdc,
+    mainnetTokens.wbtc,
+    mainnetTokens.bnb,
   ],
   [ChainId.TESTNET]: [],
 };
