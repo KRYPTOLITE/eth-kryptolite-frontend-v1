@@ -11,3 +11,4 @@ export const getKrlAddress = () => getAddress(addresses.kryptolite);
 export const getMulticallAddress = () => getAddress(addresses.multiCall);
 export const getKrlRefereeTrackerAddress = () =>
   getAddress(addresses.kryptoliteSwapRefereeTracker);
+export const getRouterAddress = () => getAddress(addresses.router);

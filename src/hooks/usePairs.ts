@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import pairRouterAbi from "../config/abi/pairRouterAbi.json";
+import router01Abi from "../config/abi/router01Abi.json";
 import { Interface } from "@ethersproject/abi";
 import useActiveWeb3React from "./useActiveWeb3React";
 import { useMultipleContractSingleData } from "../state/multicall/hooks";
@@ -8,7 +8,7 @@ import { Currency } from "../config/entities/currency";
 import { TokenAmount } from "../config/entities/fractions/tokenAmount";
 import { Pair } from "../config/entities/pair";
 
-const PAIR_INTERFACE = new Interface(pairRouterAbi);
+const PAIR_INTERFACE = new Interface(router01Abi);
 
 export enum PairState {
   LOADING,
@@ -57,8 +57,6 @@ export function usePairs(
     PAIR_INTERFACE,
     "getReserves"
   );
-
-  // console.log(pairAddresses, PAIR_INTERFACE, "getReserves");
 
   return useMemo(() => {
     return results.map((result, i) => {

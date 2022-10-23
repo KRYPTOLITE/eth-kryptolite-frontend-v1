@@ -396,6 +396,7 @@ export default function Swap() {
   const USDTCurrency = useCurrency(
     "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
   );
+
   const { v2Trade: tradeWithUSD } = useDerivedSwapInfo(
     Field.INPUT,
     "1",
@@ -434,14 +435,14 @@ export default function Swap() {
           ? tradeWithUSD.executionPrice.toSignificant(6)
           : tradeWithUSD.executionPrice.invert()?.toSignificant(6);
 
-        // Just a hack to replace ETH with wbnb address
+        // Just a hack to replace ETH with weth address
         const outCurrency =
           outputCurrencyId === "ETH"
-            ? "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
+            ? "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
             : outputCurrencyId;
 
         fetch(
-          `https://api.bscscan.com/api?module=stats&action=tokenCsupply&contractaddress=${outCurrency}&apikey=${process.env.GATSBY_BINANCE_API_KEY}`
+          `https://api.etherscan.io/api?module=stats&action=tokensupply&contractaddress=${outCurrency}&apikey=${process.env.GATSBY_BINANCE_API_KEY}`
         ).then(async (res) => {
           const apiResponse = await res.json();
           const mc = new BigNumber(apiResponse.result)

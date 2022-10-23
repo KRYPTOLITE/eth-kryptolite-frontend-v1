@@ -71,6 +71,10 @@ export const addresses: { [index: string]: Address } = {
     1: "0x5BA1e12693Dc8F9c48aAD8770482f4739bEeD696",
     97: "",
   },
+  router: {
+    1: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
+    97: "",
+  },
 };
 
 export const RecognizedChainIdList: RecognizedChainId[] = [
