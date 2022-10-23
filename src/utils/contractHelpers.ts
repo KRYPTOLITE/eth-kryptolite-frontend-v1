@@ -4,6 +4,7 @@ import {
   getKrlAddress,
   getKrlRefereeTrackerAddress,
   getMulticallAddress,
+  getRouterAddress,
 } from "./addressHelpers";
 import bep20Abi from "../config/abi/erc20.json";
 import MultiCallAbi from "../config/abi/Multicall.json";
@@ -11,6 +12,7 @@ import krlReward from "../config/abi/krlReward.json";
 import { JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
 import { simpleRpcProvider } from "./providers";
 import KrlRefTracker from "../config/abi/KrlRefTracker.json";
+import Router01Abi from "../config/abi/router01Abi.json";
 
 export const getContract = (
   abi: any,
@@ -52,4 +54,8 @@ export const getMulticallContract = (signer?: Signer | Provider) => {
 
 export const getKrlRefereeTrackerContract = (signer?: Signer | Provider) => {
   return getContract(KrlRefTracker, getKrlRefereeTrackerAddress(), signer);
+};
+
+export const getRouterContract = () => {
+  return getContract(Router01Abi, getRouterAddress());
 };
