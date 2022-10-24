@@ -477,7 +477,6 @@ export default function Swap() {
             )}
           >
             <div className="flex gap-3 items-center mb-5">
-              {/* <img src="" alt="Kryptolite logo" className="w-10 h-10 bg-gray-500 overflow-hidden" /> */}
               <CurrencyLogo currency={currencies[Field.OUTPUT]} />
               <div>
                 <h3 className="-mb-0.5 text-sm">
