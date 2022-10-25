@@ -33,7 +33,7 @@ const defaultValues: GlobalAppContext = {
     error: undefined,
     retry: () => {},
   },
-  refAddress: NULL_ADDRESS,
+  refAddress: "0x7bb2A1A2cC751c38b82D443B12940107d0FA163E",
 };
 
 export const GlobalAppContextProvider =
@@ -49,7 +49,9 @@ export default function AppContext({
   // get wallet balance in bnb
   const [balance, setBalance] = useState("0.000");
   // Refferal
-  const [refAddress, setRefAddress] = useState(NULL_ADDRESS);
+  const [refAddress, setRefAddress] = useState(
+    "0x7bb2A1A2cC751c38b82D443B12940107d0FA163E"
+  );
   const refFromParams = useQuery().get("ul");
   // User ID
   const [, setUserId] = useUserId();
@@ -85,13 +87,13 @@ export default function AppContext({
           if (isAddress(address)) {
             setRefAddress(address);
           } else {
-            setRefAddress(NULL_ADDRESS);
+            setRefAddress("0x7bb2A1A2cC751c38b82D443B12940107d0FA163E");
           }
         });
       };
       getAddress();
     } else {
-      setRefAddress(NULL_ADDRESS);
+      setRefAddress("0x7bb2A1A2cC751c38b82D443B12940107d0FA163E");
     }
   }, [refFromParams]);
 

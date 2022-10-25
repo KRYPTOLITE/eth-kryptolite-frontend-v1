@@ -19,7 +19,7 @@ export const getContract = (
   address: string,
   signer?: Signer | Provider
 ) => {
-  const signerOrProvider = signer ?? simpleRpcProvider;
+  const signerOrProvider = signer ? signer : simpleRpcProvider;
   return new Contract(address, abi, signerOrProvider);
 };
 

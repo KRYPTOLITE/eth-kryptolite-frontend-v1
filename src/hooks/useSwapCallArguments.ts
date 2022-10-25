@@ -23,7 +23,7 @@ interface SwapCall {
  */
 export function useSwapCallArguments(
   trade: Trade | undefined, // trade to execute, required
-  allowedSlippage: number, // in bips
+  allowedSlippage: number // in bips
 ): SwapCall[] {
   const { account, chainId, library } = useActiveWeb3React();
   const { refAddress } = useAppContext();
@@ -43,7 +43,7 @@ export function useSwapCallArguments(
         feeOnTransfer: false,
         allowedSlippage: new Percent(JSBI.BigInt(allowedSlippage), BIPS_BASE),
         referrer: refAddress,
-      }),
+      })
     );
 
     if (trade.tradeType === TradeType.EXACT_INPUT) {
@@ -52,7 +52,7 @@ export function useSwapCallArguments(
           feeOnTransfer: true,
           allowedSlippage: new Percent(JSBI.BigInt(allowedSlippage), BIPS_BASE),
           referrer: refAddress,
-        }),
+        })
       );
     }
 

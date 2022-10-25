@@ -1,5 +1,8 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE } from "../../config/constants";
+import {
+  DEFAULT_DEADLINE_FROM_NOW,
+  INITIAL_ALLOWED_SLIPPAGE,
+} from "../../config/constants";
 import { SerializedToken } from "../../config/constants/types";
 import {
   updateGasPrice,
@@ -71,19 +74,24 @@ export default createReducer(initialState, (builder) =>
       if (!state.tokens) {
         state.tokens = {};
       }
-      state.tokens[serializedToken.chainId] = state.tokens[serializedToken.chainId] || {};
-      state.tokens[serializedToken.chainId][serializedToken.address] = serializedToken;
+      state.tokens[serializedToken.chainId] =
+        state.tokens[serializedToken.chainId] || {};
+      state.tokens[serializedToken.chainId][serializedToken.address] =
+        serializedToken;
       state.timestamp = currentTimestamp();
     })
-    .addCase(removeSerializedToken, (state, { payload: { address, chainId } }) => {
-      if (!state.tokens) {
-        state.tokens = {};
+    .addCase(
+      removeSerializedToken,
+      (state, { payload: { address, chainId } }) => {
+        if (!state.tokens) {
+          state.tokens = {};
+        }
+        state.tokens[chainId] = state.tokens[chainId] || {};
+        delete state.tokens[chainId][address];
+        state.timestamp = currentTimestamp();
       }
-      state.tokens[chainId] = state.tokens[chainId] || {};
-      delete state.tokens[chainId][address];
-      state.timestamp = currentTimestamp();
-    })
+    )
     .addCase(updateUserId, (state, action) => {
       state.userId = action.payload.userId;
-    }),
+    })
 );

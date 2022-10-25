@@ -22,7 +22,10 @@ function GlobalHooks() {
  * This component is used to share state accross all sections of the site without unmounting on page
  * navigation.
  */
-export default function GlobalAppWrapper(props: { children: React.ReactNode; path: string }) {
+export default function GlobalAppWrapper(props: {
+  children: React.ReactNode;
+  path: string;
+}) {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       <Provider store={store}>

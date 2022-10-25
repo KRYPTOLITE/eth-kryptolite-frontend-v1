@@ -9,7 +9,6 @@ import isZero from "../utils/isZero";
 import { useSwapCallArguments } from "./useSwapCallArguments";
 import { SwapParameters } from "../config/constants/router";
 import { Trade } from "../config/entities/trade";
-import { useGasPrice } from "../state/user/hooks";
 
 export enum SwapCallbackState {
   INVALID,
@@ -38,18 +37,28 @@ interface SwapCallEstimate {
 // and the user has approved the slippage adjusted input amount for the trade
 export function useSwapCallback(
   trade: Trade | undefined, // trade to execute, required
-  allowedSlippage: number, // in bips
-): { state: SwapCallbackState; callback: null | (() => Promise<string>); error: string | null } {
+  allowedSlippage: number // in bips
+): {
+  state: SwapCallbackState;
+  callback: null | (() => Promise<string>);
+  error: string | null;
+} {
   const { account, chainId, library } = useActiveWeb3React();
-  const gasPrice = useGasPrice();
 
-  const swapCalls = useSwapCallArguments(trade, allowedSlippage + INITIAL_ALLOWED_SLIPPAGE);
+  const swapCalls = useSwapCallArguments(
+    trade,
+    allowedSlippage + INITIAL_ALLOWED_SLIPPAGE
+  );
 
   const addTransaction = useTransactionAdder();
 
   return useMemo(() => {
     if (!trade || !library || !account || !chainId) {
-      return { state: SwapCallbackState.INVALID, callback: null, error: "Missing dependencies" };
+      return {
+        state: SwapCallbackState.INVALID,
+        callback: null,
+        error: "Missing dependencies",
+      };
     }
     if (!account) {
       return { state: SwapCallbackState.LOADING, callback: null, error: null };
@@ -58,48 +67,81 @@ export function useSwapCallback(
     return {
       state: SwapCallbackState.VALID,
       callback: async function onSwap(): Promise<string> {
+        const { gasPrice } = await library?.getFeeData();
+
         const estimatedCalls: SwapCallEstimate[] = await Promise.all(
           swapCalls.map((call) => {
-            const {
+            /* const {
               parameters: { methodName, args, value },
               contract,
             } = call;
-            const options = !value || isZero(value) ? {} : { value };
+            const options = !value || isZero(value) ? {} : { value }; */
 
-            return contract.estimateGas[methodName](...args, options)
+            return {
+              call,
+              gasEstimate: BigNumber.from("300000"),
+            };
+
+            /* return contract.estimateGas[methodName](...args, {
+              ...options,
+              // gasPrice: "0x4D72E74BE4",
+              gas: gas,
+            })
               .then((gasEstimate) => {
                 return {
                   call,
+                  gasPrice: gas,
                   gasEstimate,
                 };
               })
               .catch((gasError) => {
-                console.error("Gas estimate failed, trying to extract error", call);
+                console.error(
+                  "Gas estimate failed, trying to extract error",
+                  call
+                );
 
                 return contract.callStatic[methodName](...args, options)
                   .then((result) => {
-                    console.error("Unexpected successful call after failed estimate gas", call, gasError, result);
-                    return { call, error: "Unexpected issue with estimating the gas. Please try again." };
+                    console.error(
+                      "Unexpected successful call after failed estimate gas",
+                      call,
+                      gasError,
+                      result
+                    );
+                    return {
+                      call,
+                      error:
+                        "Unexpected issue with estimating the gas. Please try again.",
+                    };
                   })
                   .catch((callError) => {
                     console.error("Call threw error", call, callError);
 
-                    return { call, error: swapErrorToUserReadableMessage(callError) };
+                    return {
+                      call,
+                      error: swapErrorToUserReadableMessage(callError),
+                    };
                   });
-              });
-          }),
+              }); */
+          })
         );
 
         // a successful estimation is a bignumber gas estimate and the next call is also a bignumber gas estimate
         const successfulEstimation = estimatedCalls.find(
           (el, ix, list): el is SuccessfulCall =>
-            "gasEstimate" in el && (ix === list.length - 1 || "gasEstimate" in list[ix + 1]),
+            "gasEstimate" in el &&
+            (ix === list.length - 1 || "gasEstimate" in list[ix + 1])
         );
 
         if (!successfulEstimation) {
-          const errorCalls = estimatedCalls.filter((call): call is FailedCall => "error" in call);
-          if (errorCalls.length > 0) throw new Error(errorCalls[errorCalls.length - 1].error);
-          throw new Error("Unexpected error. Could not estimate gas for the swap.");
+          const errorCalls = estimatedCalls.filter(
+            (call): call is FailedCall => "error" in call
+          );
+          if (errorCalls.length > 0)
+            throw new Error(errorCalls[errorCalls.length - 1].error);
+          throw new Error(
+            "Unexpected error. Could not estimate gas for the swap."
+          );
         }
 
         const {
@@ -112,8 +154,10 @@ export function useSwapCallback(
 
         return contract[methodName](...args, {
           gasLimit: calculateGasMargin(gasEstimate),
-          gasPrice,
-          ...(value && !isZero(value) ? { value, from: account } : { from: account }),
+          gasPrice: gasPrice?._hex,
+          ...(value && !isZero(value)
+            ? { value, from: account }
+            : { from: account }),
         })
           .then((response: any) => {
             const inputSymbol = trade.inputAmount.currency.symbol;
@@ -137,13 +181,15 @@ export function useSwapCallback(
             } else {
               // otherwise, the error was unexpected and we need to convey that
               console.error(`Swap failed`, error, methodName, args, value);
-              throw new Error(`Swap failed: ${swapErrorToUserReadableMessage(error)}`);
+              throw new Error(
+                `Swap failed: ${swapErrorToUserReadableMessage(error)}`
+              );
             }
           });
       },
       error: null,
     };
-  }, [trade, library, account, chainId, swapCalls, gasPrice, addTransaction]);
+  }, [trade, library, account, chainId, swapCalls, addTransaction]);
 }
 
 /**
@@ -159,7 +205,8 @@ function swapErrorToUserReadableMessage(error: any) {
     error = error.error ?? error.data?.originalError;
   }
 
-  if (reason?.indexOf("execution reverted: ") === 0) reason = reason.substring("execution reverted: ".length);
+  if (reason?.indexOf("execution reverted: ") === 0)
+    reason = reason.substring("execution reverted: ".length);
 
   switch (reason) {
     case "TransferHelper: TRANSFER_FROM_FAILED":

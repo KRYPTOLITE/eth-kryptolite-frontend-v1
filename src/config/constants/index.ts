@@ -139,7 +139,7 @@ export const ROUTER_ADDRESS = {
 export const MIN_ETH: JSBI = JSBI.exponentiate(
   JSBI.BigInt(10),
   JSBI.BigInt(16)
-); // .01 ETH
+);
 
 // default allowed slippage, in bips
 export const INITIAL_ALLOWED_SLIPPAGE = 70;

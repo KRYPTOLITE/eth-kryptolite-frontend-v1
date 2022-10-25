@@ -1,8 +1,16 @@
 [
   {
     "inputs": [
-      { "internalType": "address", "name": "_WETH", "type": "address" },
-      { "internalType": "uint16", "name": "_swapFee", "type": "uint16" },
+      {
+        "internalType": "address",
+        "name": "_WETH",
+        "type": "address"
+      },
+      {
+        "internalType": "uint16",
+        "name": "_swapFee",
+        "type": "uint16"
+      },
       {
         "internalType": "uint16",
         "name": "_referralRewardRate",
@@ -50,6 +58,106 @@
     ],
     "name": "CustomReferralRewardRateUpdated",
     "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
+          },
+          {
+            "internalType": "address",
+            "name": "fromToken",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "toToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountFrom",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "referee",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "minOut",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "fee",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct KryptoliteMultichainRouter.ExternalSwapData",
+        "name": "swapData",
+        "type": "tuple"
+      }
+    ],
+    "name": "executeOneInchSwap",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
+          },
+          {
+            "internalType": "address",
+            "name": "fromToken",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "toToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountFrom",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "referee",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "minOut",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "fee",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct KryptoliteMultichainRouter.ExternalSwapData",
+        "name": "swapData",
+        "type": "tuple"
+      }
+    ],
+    "name": "executeZeroExSwap",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
   },
   {
     "anonymous": false,
@@ -108,6 +216,13 @@
     ],
     "name": "OwnershipTransferred",
     "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "pause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "anonymous": false,
@@ -199,206 +314,17 @@
     "type": "event"
   },
   {
-    "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "uint16",
-        "name": "swapFee",
-        "type": "uint16"
-      }
-    ],
-    "name": "SwapFeeUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
         "internalType": "address",
-        "name": "account",
+        "name": "_factory",
         "type": "address"
-      }
-    ],
-    "name": "Unpaused",
-    "type": "event"
-  },
-  {
-    "inputs": [],
-    "name": "FEE_DENOMINATOR",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "WETH",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "name": "customReferralRewardRate",
-    "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
+      },
       {
-        "components": [
-          { "internalType": "bytes", "name": "data", "type": "bytes" },
-          { "internalType": "address", "name": "fromToken", "type": "address" },
-          { "internalType": "address", "name": "toToken", "type": "address" },
-          {
-            "internalType": "uint256",
-            "name": "amountFrom",
-            "type": "uint256"
-          },
-          { "internalType": "address", "name": "referee", "type": "address" },
-          { "internalType": "uint256", "name": "minOut", "type": "uint256" },
-          { "internalType": "bool", "name": "fee", "type": "bool" }
-        ],
-        "internalType": "struct KryptoliteMultichainRouterV1.ExternalSwapData",
-        "name": "swapData",
-        "type": "tuple"
+        "internalType": "bytes",
+        "name": "_initCode",
+        "type": "bytes"
       }
-    ],
-    "name": "executeOneInchSwap",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          { "internalType": "bytes", "name": "data", "type": "bytes" },
-          { "internalType": "address", "name": "fromToken", "type": "address" },
-          { "internalType": "address", "name": "toToken", "type": "address" },
-          {
-            "internalType": "uint256",
-            "name": "amountFrom",
-            "type": "uint256"
-          },
-          { "internalType": "address", "name": "referee", "type": "address" },
-          { "internalType": "uint256", "name": "minOut", "type": "uint256" },
-          { "internalType": "bool", "name": "fee", "type": "bool" }
-        ],
-        "internalType": "struct KryptoliteMultichainRouterV1.ExternalSwapData",
-        "name": "swapData",
-        "type": "tuple"
-      }
-    ],
-    "name": "executeZeroExSwap",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "feeReceiver",
-    "outputs": [
-      { "internalType": "address payable", "name": "", "type": "address" }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "name": "forkActivated",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "name": "forkInitCode",
-    "outputs": [{ "internalType": "bytes", "name": "", "type": "bytes" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "user", "type": "address" }
-    ],
-    "name": "getUserReferee",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "user", "type": "address" }
-    ],
-    "name": "hasUserReferee",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "oneInch",
-    "outputs": [
-      { "internalType": "address payable", "name": "", "type": "address" }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "owner",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "pause",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "paused",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "referralRegistry",
-    "outputs": [
-      {
-        "internalType": "contract IReferralRegistry",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "referralRewardRate",
-    "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "referralsActivated",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "_factory", "type": "address" },
-      { "internalType": "bytes", "name": "_initCode", "type": "bytes" }
     ],
     "name": "registerFork",
     "outputs": [],
@@ -416,20 +342,44 @@
     "inputs": [
       {
         "components": [
-          { "internalType": "address", "name": "fork", "type": "address" },
-          { "internalType": "address", "name": "referee", "type": "address" },
-          { "internalType": "bool", "name": "fee", "type": "bool" }
+          {
+            "internalType": "address",
+            "name": "fork",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "referee",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "fee",
+            "type": "bool"
+          }
         ],
-        "internalType": "struct KryptoliteMultichainRouterV1.SwapData",
+        "internalType": "struct KryptoliteMultichainRouter.SwapData",
         "name": "swapData",
         "type": "tuple"
       },
-      { "internalType": "uint256", "name": "amountOut", "type": "uint256" },
-      { "internalType": "address[]", "name": "path", "type": "address[]" }
+      {
+        "internalType": "uint256",
+        "name": "amountOut",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "path",
+        "type": "address[]"
+      }
     ],
     "name": "swapETHForExactTokens",
     "outputs": [
-      { "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" }
+      {
+        "internalType": "uint256[]",
+        "name": "amounts",
+        "type": "uint256[]"
+      }
     ],
     "stateMutability": "payable",
     "type": "function"
@@ -438,20 +388,44 @@
     "inputs": [
       {
         "components": [
-          { "internalType": "address", "name": "fork", "type": "address" },
-          { "internalType": "address", "name": "referee", "type": "address" },
-          { "internalType": "bool", "name": "fee", "type": "bool" }
+          {
+            "internalType": "address",
+            "name": "fork",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "referee",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "fee",
+            "type": "bool"
+          }
         ],
-        "internalType": "struct KryptoliteMultichainRouterV1.SwapData",
+        "internalType": "struct KryptoliteMultichainRouter.SwapData",
         "name": "swapData",
         "type": "tuple"
       },
-      { "internalType": "uint256", "name": "amountOutMin", "type": "uint256" },
-      { "internalType": "address[]", "name": "path", "type": "address[]" }
+      {
+        "internalType": "uint256",
+        "name": "amountOutMin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "path",
+        "type": "address[]"
+      }
     ],
     "name": "swapExactETHForTokens",
     "outputs": [
-      { "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" }
+      {
+        "internalType": "uint256[]",
+        "name": "amounts",
+        "type": "uint256[]"
+      }
     ],
     "stateMutability": "payable",
     "type": "function"
@@ -460,16 +434,36 @@
     "inputs": [
       {
         "components": [
-          { "internalType": "address", "name": "fork", "type": "address" },
-          { "internalType": "address", "name": "referee", "type": "address" },
-          { "internalType": "bool", "name": "fee", "type": "bool" }
+          {
+            "internalType": "address",
+            "name": "fork",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "referee",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "fee",
+            "type": "bool"
+          }
         ],
-        "internalType": "struct KryptoliteMultichainRouterV1.SwapData",
+        "internalType": "struct KryptoliteMultichainRouter.SwapData",
         "name": "swapData",
         "type": "tuple"
       },
-      { "internalType": "uint256", "name": "amountOutMin", "type": "uint256" },
-      { "internalType": "address[]", "name": "path", "type": "address[]" }
+      {
+        "internalType": "uint256",
+        "name": "amountOutMin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "path",
+        "type": "address[]"
+      }
     ],
     "name": "swapExactETHForTokensSupportingFeeOnTransferTokens",
     "outputs": [],
@@ -480,21 +474,49 @@
     "inputs": [
       {
         "components": [
-          { "internalType": "address", "name": "fork", "type": "address" },
-          { "internalType": "address", "name": "referee", "type": "address" },
-          { "internalType": "bool", "name": "fee", "type": "bool" }
+          {
+            "internalType": "address",
+            "name": "fork",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "referee",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "fee",
+            "type": "bool"
+          }
         ],
-        "internalType": "struct KryptoliteMultichainRouterV1.SwapData",
+        "internalType": "struct KryptoliteMultichainRouter.SwapData",
         "name": "swapData",
         "type": "tuple"
       },
-      { "internalType": "uint256", "name": "amountIn", "type": "uint256" },
-      { "internalType": "uint256", "name": "amountOutMin", "type": "uint256" },
-      { "internalType": "address[]", "name": "path", "type": "address[]" }
+      {
+        "internalType": "uint256",
+        "name": "amountIn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amountOutMin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "path",
+        "type": "address[]"
+      }
     ],
     "name": "swapExactTokensForETH",
     "outputs": [
-      { "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" }
+      {
+        "internalType": "uint256[]",
+        "name": "amounts",
+        "type": "uint256[]"
+      }
     ],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -503,17 +525,41 @@
     "inputs": [
       {
         "components": [
-          { "internalType": "address", "name": "fork", "type": "address" },
-          { "internalType": "address", "name": "referee", "type": "address" },
-          { "internalType": "bool", "name": "fee", "type": "bool" }
+          {
+            "internalType": "address",
+            "name": "fork",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "referee",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "fee",
+            "type": "bool"
+          }
         ],
-        "internalType": "struct KryptoliteMultichainRouterV1.SwapData",
+        "internalType": "struct KryptoliteMultichainRouter.SwapData",
         "name": "swapData",
         "type": "tuple"
       },
-      { "internalType": "uint256", "name": "amountIn", "type": "uint256" },
-      { "internalType": "uint256", "name": "amountOutMin", "type": "uint256" },
-      { "internalType": "address[]", "name": "path", "type": "address[]" }
+      {
+        "internalType": "uint256",
+        "name": "amountIn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amountOutMin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "path",
+        "type": "address[]"
+      }
     ],
     "name": "swapExactTokensForETHSupportingFeeOnTransferTokens",
     "outputs": [],
@@ -524,21 +570,49 @@
     "inputs": [
       {
         "components": [
-          { "internalType": "address", "name": "fork", "type": "address" },
-          { "internalType": "address", "name": "referee", "type": "address" },
-          { "internalType": "bool", "name": "fee", "type": "bool" }
+          {
+            "internalType": "address",
+            "name": "fork",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "referee",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "fee",
+            "type": "bool"
+          }
         ],
-        "internalType": "struct KryptoliteMultichainRouterV1.SwapData",
+        "internalType": "struct KryptoliteMultichainRouter.SwapData",
         "name": "swapData",
         "type": "tuple"
       },
-      { "internalType": "uint256", "name": "amountIn", "type": "uint256" },
-      { "internalType": "uint256", "name": "amountOutMin", "type": "uint256" },
-      { "internalType": "address[]", "name": "path", "type": "address[]" }
+      {
+        "internalType": "uint256",
+        "name": "amountIn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amountOutMin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "path",
+        "type": "address[]"
+      }
     ],
     "name": "swapExactTokensForTokens",
     "outputs": [
-      { "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" }
+      {
+        "internalType": "uint256[]",
+        "name": "amounts",
+        "type": "uint256[]"
+      }
     ],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -547,17 +621,41 @@
     "inputs": [
       {
         "components": [
-          { "internalType": "address", "name": "fork", "type": "address" },
-          { "internalType": "address", "name": "referee", "type": "address" },
-          { "internalType": "bool", "name": "fee", "type": "bool" }
+          {
+            "internalType": "address",
+            "name": "fork",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "referee",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "fee",
+            "type": "bool"
+          }
         ],
-        "internalType": "struct KryptoliteMultichainRouterV1.SwapData",
+        "internalType": "struct KryptoliteMultichainRouter.SwapData",
         "name": "swapData",
         "type": "tuple"
       },
-      { "internalType": "uint256", "name": "amountIn", "type": "uint256" },
-      { "internalType": "uint256", "name": "amountOutMin", "type": "uint256" },
-      { "internalType": "address[]", "name": "path", "type": "address[]" }
+      {
+        "internalType": "uint256",
+        "name": "amountIn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amountOutMin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "path",
+        "type": "address[]"
+      }
     ],
     "name": "swapExactTokensForTokensSupportingFeeOnTransferTokens",
     "outputs": [],
@@ -565,31 +663,65 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "swapFee",
-    "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
-    "stateMutability": "view",
-    "type": "function"
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "swapFee",
+        "type": "uint16"
+      }
+    ],
+    "name": "SwapFeeUpdated",
+    "type": "event"
   },
   {
     "inputs": [
       {
         "components": [
-          { "internalType": "address", "name": "fork", "type": "address" },
-          { "internalType": "address", "name": "referee", "type": "address" },
-          { "internalType": "bool", "name": "fee", "type": "bool" }
+          {
+            "internalType": "address",
+            "name": "fork",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "referee",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "fee",
+            "type": "bool"
+          }
         ],
-        "internalType": "struct KryptoliteMultichainRouterV1.SwapData",
+        "internalType": "struct KryptoliteMultichainRouter.SwapData",
         "name": "swapData",
         "type": "tuple"
       },
-      { "internalType": "uint256", "name": "amountOut", "type": "uint256" },
-      { "internalType": "uint256", "name": "amountInMax", "type": "uint256" },
-      { "internalType": "address[]", "name": "path", "type": "address[]" }
+      {
+        "internalType": "uint256",
+        "name": "amountOut",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amountInMax",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "path",
+        "type": "address[]"
+      }
     ],
     "name": "swapTokensForExactETH",
     "outputs": [
-      { "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" }
+      {
+        "internalType": "uint256[]",
+        "name": "amounts",
+        "type": "uint256[]"
+      }
     ],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -598,28 +730,60 @@
     "inputs": [
       {
         "components": [
-          { "internalType": "address", "name": "fork", "type": "address" },
-          { "internalType": "address", "name": "referee", "type": "address" },
-          { "internalType": "bool", "name": "fee", "type": "bool" }
+          {
+            "internalType": "address",
+            "name": "fork",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "referee",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "fee",
+            "type": "bool"
+          }
         ],
-        "internalType": "struct KryptoliteMultichainRouterV1.SwapData",
+        "internalType": "struct KryptoliteMultichainRouter.SwapData",
         "name": "swapData",
         "type": "tuple"
       },
-      { "internalType": "uint256", "name": "amountOut", "type": "uint256" },
-      { "internalType": "uint256", "name": "amountInMax", "type": "uint256" },
-      { "internalType": "address[]", "name": "path", "type": "address[]" }
+      {
+        "internalType": "uint256",
+        "name": "amountOut",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amountInMax",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "path",
+        "type": "address[]"
+      }
     ],
     "name": "swapTokensForExactTokens",
     "outputs": [
-      { "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" }
+      {
+        "internalType": "uint256[]",
+        "name": "amounts",
+        "type": "uint256[]"
+      }
     ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "newOwner", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
     ],
     "name": "transferOwnership",
     "outputs": [],
@@ -634,12 +798,39 @@
     "type": "function"
   },
   {
+    "anonymous": false,
     "inputs": [
-      { "internalType": "address", "name": "account", "type": "address" },
-      { "internalType": "uint16", "name": "referralRate", "type": "uint16" }
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "Unpaused",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "uint16",
+        "name": "referralRate",
+        "type": "uint16"
+      }
     ],
     "name": "updateCustomReferralRewardRate",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -658,9 +849,21 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_factory", "type": "address" },
-      { "internalType": "bytes", "name": "_initCode", "type": "bytes" },
-      { "internalType": "bool", "name": "_activated", "type": "bool" }
+      {
+        "internalType": "address",
+        "name": "_factory",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_initCode",
+        "type": "bytes"
+      },
+      {
+        "internalType": "bool",
+        "name": "_activated",
+        "type": "bool"
+      }
     ],
     "name": "updateFork",
     "outputs": [],
@@ -708,7 +911,11 @@
   },
   {
     "inputs": [
-      { "internalType": "uint16", "name": "newSwapFee", "type": "uint16" }
+      {
+        "internalType": "uint16",
+        "name": "newSwapFee",
+        "type": "uint16"
+      }
     ],
     "name": "updateSwapFee",
     "outputs": [],
@@ -717,9 +924,21 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "token", "type": "address" },
-      { "internalType": "address", "name": "to", "type": "address" },
-      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
     ],
     "name": "withdrawERC20Token",
     "outputs": [],
@@ -728,8 +947,16 @@
   },
   {
     "inputs": [
-      { "internalType": "address payable", "name": "to", "type": "address" },
-      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+      {
+        "internalType": "address payable",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
     ],
     "name": "withdrawETH",
     "outputs": [],
@@ -737,13 +964,245 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "zeroEx",
+    "stateMutability": "payable",
+    "type": "receive"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "customReferralRewardRate",
     "outputs": [
-      { "internalType": "address payable", "name": "", "type": "address" }
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
   },
-  { "stateMutability": "payable", "type": "receive" }
+  {
+    "inputs": [],
+    "name": "FEE_DENOMINATOR",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "feeReceiver",
+    "outputs": [
+      {
+        "internalType": "address payable",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "forkActivated",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "forkInitCode",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "getUserReferee",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "hasUserReferee",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "oneInch",
+    "outputs": [
+      {
+        "internalType": "address payable",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "paused",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "referralRegistry",
+    "outputs": [
+      {
+        "internalType": "contract IReferralRegistry",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "referralRewardRate",
+    "outputs": [
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "referralsActivated",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "swapFee",
+    "outputs": [
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "WETH",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "zeroEx",
+    "outputs": [
+      {
+        "internalType": "address payable",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
 ]

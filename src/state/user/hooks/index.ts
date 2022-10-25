@@ -14,22 +14,32 @@ import { Token } from "../../../config/entities/token";
 
 export function useGasPrice(): string {
   const chainId = process.env.GATSBY_CHAIN_ID!;
-  const userGas = useSelector<AppState, AppState["user"]["gasPrice"]>((state) => state.user.gasPrice);
-  return chainId === ChainId.MAINNET.toString() ? userGas : GAS_PRICE_GWEI.testnet;
+  const userGas = useSelector<AppState, AppState["user"]["gasPrice"]>(
+    (state) => state.user.gasPrice
+  );
+  return chainId === ChainId.MAINNET.toString()
+    ? userGas
+    : GAS_PRICE_GWEI.testnet;
 }
 
-export function useUserSingleHopOnly(): [boolean, (newSingleHopOnly: boolean) => void] {
+export function useUserSingleHopOnly(): [
+  boolean,
+  (newSingleHopOnly: boolean) => void
+] {
   const dispatch = useDispatch<AppDispatch>();
 
-  const singleHopOnly = useSelector<AppState, AppState["user"]["userSingleHopOnly"]>(
-    (state) => state.user.userSingleHopOnly,
-  );
+  const singleHopOnly = useSelector<
+    AppState,
+    AppState["user"]["userSingleHopOnly"]
+  >((state) => state.user.userSingleHopOnly);
 
   const setSingleHopOnly = useCallback(
     (newSingleHopOnly: boolean) => {
-      dispatch(updateUserSingleHopOnly({ userSingleHopOnly: newSingleHopOnly }));
+      dispatch(
+        updateUserSingleHopOnly({ userSingleHopOnly: newSingleHopOnly })
+      );
     },
-    [dispatch],
+    [dispatch]
   );
 
   return [singleHopOnly, setSingleHopOnly];
@@ -41,31 +51,42 @@ export function useAddUserToken(): (token: Token) => void {
     (token: Token) => {
       dispatch(addSerializedToken({ serializedToken: serializeToken(token) }));
     },
-    [dispatch],
+    [dispatch]
   );
 }
 
-export function useRemoveUserAddedToken(): (chainId: number, address: string) => void {
+export function useRemoveUserAddedToken(): (
+  chainId: number,
+  address: string
+) => void {
   const dispatch = useDispatch<AppDispatch>();
   return useCallback(
     (chainId: number, address: string) => {
       dispatch(removeSerializedToken({ chainId, address }));
     },
-    [dispatch],
+    [dispatch]
   );
 }
 
-export function useUserSlippageTolerance(): [number, (slippage: number) => void] {
+export function useUserSlippageTolerance(): [
+  number,
+  (slippage: number) => void
+] {
   const dispatch = useDispatch<AppDispatch>();
-  const userSlippageTolerance = useSelector<AppState, AppState["user"]["userSlippageTolerance"]>((state) => {
+  const userSlippageTolerance = useSelector<
+    AppState,
+    AppState["user"]["userSlippageTolerance"]
+  >((state) => {
     return state.user.userSlippageTolerance;
   });
 
   const setUserSlippageTolerance = useCallback(
     (slippage: number) => {
-      dispatch(updateUserSlippageTolerance({ userSlippageTolerance: slippage }));
+      dispatch(
+        updateUserSlippageTolerance({ userSlippageTolerance: slippage })
+      );
     },
-    [dispatch],
+    [dispatch]
   );
 
   return [userSlippageTolerance, setUserSlippageTolerance];
@@ -81,7 +102,7 @@ export function useUserId(): [string, (id: string) => void] {
     (id: string) => {
       dispatch(updateUserId({ userId: id }));
     },
-    [dispatch],
+    [dispatch]
   );
 
   return [userId, setUserId];
