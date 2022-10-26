@@ -176,7 +176,6 @@ export function useSwapCallback(
           })
           .catch((error: any) => {
             // if the user rejected the tx, pass this along
-            console.log(error);
             if (error?.code === 4001) {
               throw new Error("Transaction rejected.");
             } else {
