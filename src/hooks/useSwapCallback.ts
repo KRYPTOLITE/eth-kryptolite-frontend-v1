@@ -71,26 +71,23 @@ export function useSwapCallback(
 
         const estimatedCalls: SwapCallEstimate[] = await Promise.all(
           swapCalls.map((call) => {
-            /* const {
+            const {
               parameters: { methodName, args, value },
               contract,
             } = call;
-            const options = !value || isZero(value) ? {} : { value }; */
+            const options = !value || isZero(value) ? {} : { value };
 
-            return {
+            /* return {
               call,
               gasEstimate: BigNumber.from("300000"),
-            };
+            }; */
 
-            /* return contract.estimateGas[methodName](...args, {
+            return contract.estimateGas[methodName](...args, {
               ...options,
-              // gasPrice: "0x4D72E74BE4",
-              gas: gas,
             })
               .then((gasEstimate) => {
                 return {
                   call,
-                  gasPrice: gas,
                   gasEstimate,
                 };
               })
@@ -122,7 +119,7 @@ export function useSwapCallback(
                       error: swapErrorToUserReadableMessage(callError),
                     };
                   });
-              }); */
+              });
           })
         );
 
