@@ -3,7 +3,7 @@ import { ETHER } from "../entities/currency";
 import { CurrencyAmount } from "../entities/fractions/currencyAmount";
 import { Percent } from "../entities/fractions/percent";
 import { Trade } from "../entities/trade";
-import { TradeType } from "./types";
+import { FACTORY_ADDRESS, TradeType } from "./types";
 
 /**
  * Options for producing the arguments to send call to the router.
@@ -92,11 +92,7 @@ export abstract class Router {
             ? "swapExactETHForTokensSupportingFeeOnTransferTokens"
             : "swapExactETHForTokens";
 
-          args = [
-            ["0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f", refAddress, true],
-            amountOut,
-            path,
-          ];
+          args = [[FACTORY_ADDRESS, refAddress, true], amountOut, path];
           value = amountIn;
         } else if (etherOut) {
           methodName = useFeeOnTransfer
@@ -104,7 +100,7 @@ export abstract class Router {
             : "swapExactTokensForETH";
 
           args = [
-            ["0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f", refAddress, true],
+            [FACTORY_ADDRESS, refAddress, true],
             amountIn,
             amountOut,
             path,
@@ -116,7 +112,7 @@ export abstract class Router {
             : "swapExactTokensForTokens";
 
           args = [
-            ["0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f", refAddress, true],
+            [FACTORY_ADDRESS, refAddress, true],
             amountIn,
             amountOut,
             path,
@@ -129,17 +125,13 @@ export abstract class Router {
         if (etherIn) {
           methodName = "swapETHForExactTokens";
 
-          args = [
-            ["0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f", refAddress, true],
-            amountOut,
-            path,
-          ];
+          args = [[FACTORY_ADDRESS, refAddress, true], amountOut, path];
           value = amountIn;
         } else if (etherOut) {
           methodName = "swapTokensForExactETH";
 
           args = [
-            ["0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f", refAddress, true],
+            [FACTORY_ADDRESS, refAddress, true],
             amountOut,
             amountIn,
             path,
@@ -149,7 +141,7 @@ export abstract class Router {
           methodName = "swapTokensForExactTokens";
 
           args = [
-            ["0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f", refAddress, true],
+            [FACTORY_ADDRESS, refAddress, true],
             amountOut,
             amountIn,
             path,
