@@ -67,7 +67,7 @@ export function useSwapCallback(
     return {
       state: SwapCallbackState.VALID,
       callback: async function onSwap(): Promise<string> {
-        const { gasPrice } = await library?.getFeeData();
+        const { maxFeePerGas: gasPrice } = await library?.getFeeData();
 
         const estimatedCalls: SwapCallEstimate[] = await Promise.all(
           swapCalls.map((call) => {
