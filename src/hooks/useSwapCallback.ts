@@ -77,11 +77,6 @@ export function useSwapCallback(
             } = call;
             const options = !value || isZero(value) ? {} : { value };
 
-            /* return {
-              call,
-              gasEstimate: BigNumber.from("300000"),
-            }; */
-
             return contract.estimateGas[methodName](...args, {
               ...options,
             })
