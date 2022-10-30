@@ -1,7 +1,10 @@
+import { Link } from "gatsby";
+
 interface BaseNavigationType {
   id: number | string;
   title: string;
   href: string;
+  options?: Omit<React.ComponentPropsWithoutRef<typeof Link>, "to">; // Not optimal
 }
 
 interface cardTypes {
@@ -25,8 +28,18 @@ export const navigationItems: NavigationType[] = [
     title: "Swap",
     href: "/swap",
   },
-  { id: 2, title: "Stake", href: "https://kryptolite.rocks/stake" },
-  { id: 3, title: "Launch Pad", href: "https://kryptolite.rocks/launch-pad" },
+  {
+    id: 2,
+    title: "Stake",
+    href: "https://kryptolite.rocks/stake",
+    options: { target: "_self" },
+  },
+  {
+    id: 3,
+    title: "Launch Pad",
+    href: "https://kryptolite.rocks/launch-pad",
+    options: { target: "_self" },
+  },
   {
     id: "7672i86e83",
     title: "Featured NFTs",
@@ -36,16 +49,19 @@ export const navigationItems: NavigationType[] = [
         id: 1,
         title: "Bitcoin Pizza NFT",
         href: "https://kryptolite.rocks/bitcoin-pizza-day-2022",
+        options: { target: "_self" },
       },
       {
         id: "ry6dce",
         title: "Kryptolite Bab Club",
         href: "https://kryptolite.rocks/kryptolite-bab-club",
+        options: { target: "_self" },
       },
       {
         id: "y3r3y876rfy",
         title: "Cyberchain Abuja POAP (CAP)",
         href: "https://kryptolite.rocks/embracing-the-metaverse-with-cyberchain",
+        options: { target: "_self" },
       },
     ],
   },
@@ -80,7 +96,7 @@ export const cardItems: cardTypes[] = [
     content:
       "Pledge crypto to earn for additional rewards from the bonus staking pool!",
     src: "bg-[url('./images/stake-page-hero.png')]",
-    link: "/stake",
+    link: "https://kryptolite.rocks/stake",
   },
   {
     id: 2,
@@ -96,7 +112,7 @@ export const cardItems: cardTypes[] = [
     content:
       "KRYPTOLITE empowers cryptocurrency projects with the ability to distribute tokens and raise liquidity.",
     src: "bg-[url('./images/launchpad-hero-illustration.svg')]",
-    link: "/bitcoin-pizza-day-2022",
+    link: "https://kryptolite.rocks/bitcoin-pizza-day-2022",
   },
   {
     id: 4,

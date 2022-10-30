@@ -48,8 +48,8 @@ export default function Link({
     <a
       href={to}
       className={cls(linkClassName, className)}
-      {...other}
       target="_blank"
+      {...other}
     >
       {children}
     </a>

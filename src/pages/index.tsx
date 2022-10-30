@@ -49,7 +49,7 @@ export default function IndexPage() {
                 <span>Swap</span>
               </Link>
               <Link
-                to="/stake"
+                to="https://kryptolite.rocks/stake"
                 as="button"
                 className="inline-flex space-x-2 rounded-none"
                 variant="outline"

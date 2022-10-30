@@ -10,19 +10,25 @@ import { BiCaretDown } from "react-icons/bi";
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
-  const toggleMenu: React.MouseEventHandler<HTMLButtonElement> = useCallback((e) => {
-    e.stopPropagation();
-    setOpen((p) => !p);
-  }, []);
+  const toggleMenu: React.MouseEventHandler<HTMLButtonElement> = useCallback(
+    (e) => {
+      e.stopPropagation();
+      setOpen((p) => !p);
+    },
+    []
+  );
 
   const closeMenu = useCallback(() => setOpen(false), []);
 
   return (
     <Section
-      containerClass="bg-transparent fixed top-0 w-full z-50"
-      className={cls("!max-w-screen-2xl bg-white shadow-md shadow-gray-400/20", {
-        "shadow-lg": !open,
-      })}
+      containerClass={cls(
+        "bg-transparent bg-white shadow-md shadow-gray-400/20 fixed top-0 w-full z-50",
+        {
+          "shadow-lg": !open,
+        }
+      )}
+      className="!max-w-screen-2xl bg-white "
     >
       <div className="flex flex-col py-3 px-4 md:items-center md:justify-between md:flex-row md:px-6">
         <div className="flex flex-row items-center justify-between">
@@ -55,9 +61,12 @@ export default function Navbar() {
             {navigationItems.map((nav) => {
               if (nav.children) {
                 return (
-                  <li key={nav.id} className="inline-block mt-2 md:mt-0 text-lg">
+                  <li
+                    key={nav.id}
+                    className="inline-block mt-2 md:mt-0 text-lg"
+                  >
                     <div
-                      className="!px-4 !py-2 !font-normal !bg-transparent !rounded-lg
+                      className="!px-4 !py-2 !font-normal !bg-transparent !rounded-lg cursor-pointer
                   !text-primary-600 hover:!text-primary-800 focus:!text-primary-800
                   hover:!bg-primary-100 focus:!bg-primary-100 focus:!outline-none !text-base
                   flex justify-between items-center gap-2 group relative mx-1 w-full md:w-auto"
@@ -76,6 +85,7 @@ export default function Navbar() {
                           !text-primary-600 hover:!text-primary-800 focus:!text-primary-800
                           hover:!bg-primary-100 focus:!bg-primary-100 focus:!outline-none !text-base"
                             onClick={closeMenu}
+                            {...n.options}
                           >
                             {n.title}
                           </Link>
@@ -93,13 +103,17 @@ export default function Navbar() {
                   !text-primary-600 hover:!text-primary-800 focus:!text-primary-800
                   hover:!bg-primary-100 focus:!bg-primary-100 focus:!outline-none !text-base"
                     onClick={closeMenu}
+                    {...nav.options}
                   >
                     {nav.title}
                   </Link>
                 </li>
               );
             })}
-            <li key={"connect_wallet_list_item"} className="inline-block mt-2 md:mt-0 text-lg">
+            <li
+              key={"connect_wallet_list_item"}
+              className="inline-block mt-2 md:mt-0 text-lg"
+            >
               <ConnectWalletButton />
             </li>
           </ul>
