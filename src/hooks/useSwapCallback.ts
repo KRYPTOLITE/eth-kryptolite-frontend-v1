@@ -67,7 +67,7 @@ export function useSwapCallback(
     return {
       state: SwapCallbackState.VALID,
       callback: async function onSwap(): Promise<string> {
-        const { maxFeePerGas: gasPrice } = await library?.getFeeData();
+        const { gasPrice, maxPriorityFeePerGas } = await library.getFeeData();
 
         const estimatedCalls: SwapCallEstimate[] = await Promise.all(
           swapCalls.map((call) => {
@@ -146,7 +146,8 @@ export function useSwapCallback(
 
         return contract[methodName](...args, {
           gasLimit: calculateGasMargin(gasEstimate),
-          gasPrice: gasPrice?._hex,
+          gasPrice: gasPrice?.add(maxPriorityFeePerGas || BigNumber.from(1))
+            ._hex,
           ...(value && !isZero(value)
             ? { value, from: account }
             : { from: account }),

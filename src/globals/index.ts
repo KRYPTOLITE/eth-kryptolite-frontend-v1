@@ -28,8 +28,8 @@ export const navigationItems: NavigationType[] = [
   { id: 2, title: "Stake", href: "https://kryptolite.rocks/stake" },
   { id: 3, title: "Launch Pad", href: "https://kryptolite.rocks/launch-pad" },
   {
-    id: 4,
-    title: "More",
+    id: "7672i86e83",
+    title: "Featured NFTs",
     href: "#",
     children: [
       {
@@ -42,6 +42,18 @@ export const navigationItems: NavigationType[] = [
         title: "Kryptolite Bab Club",
         href: "https://kryptolite.rocks/kryptolite-bab-club",
       },
+      {
+        id: "y3r3y876rfy",
+        title: "Cyberchain Abuja POAP (CAP)",
+        href: "https://kryptolite.rocks/embracing-the-metaverse-with-cyberchain",
+      },
+    ],
+  },
+  {
+    id: 4,
+    title: "About Us",
+    href: "#",
+    children: [
       {
         id: 2,
         title: "Contract",
@@ -59,8 +71,6 @@ export const navigationItems: NavigationType[] = [
       },
     ],
   },
-  // { id: 7, title: "Launch Pad", href: "/launch-pad" },
-  // { id: 6, title: "Contact Us", href: "#contact-us" },
 ];
 
 export const cardItems: cardTypes[] = [

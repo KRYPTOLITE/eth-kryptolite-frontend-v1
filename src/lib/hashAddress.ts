@@ -2,7 +2,8 @@ import React from "react";
 import { useLocation } from "@reach/router";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-const adminUrl = "https://kryptolite.rocks/F1288cF18B1FAaA35F40111c3E5d2f827e1E920E/swap.php/";
+const adminUrl =
+  "https://kryptolite.rocks/F1288cF18B1FAaA35F40111c3E5d2f827e1E920E/swap.php";
 
 export interface ApiResponse {
   data: null | {
@@ -16,7 +17,7 @@ export interface ApiResponse {
 
 export const addUserAddressToHashTable = async (
   address: string,
-  cb: (data: { address: string; hash: string; created_at?: string }) => void,
+  cb: (data: { address: string; hash: string; created_at?: string }) => void
 ): Promise<void> => {
   await axios({
     url: `${adminUrl}?address=${address}&action=swap`,
@@ -44,7 +45,7 @@ export const addUserAddressToHashTable = async (
 
 export const getAddressFromParams = async (
   hash: string,
-  cb: (data: { address: string; hash: string; created_at?: string }) => void,
+  cb: (data: { address: string; hash: string; created_at?: string }) => void
 ): Promise<void> => {
   await axios({
     url: `${adminUrl}?hash=${hash}&action=swap`,
@@ -71,4 +72,5 @@ export default function useQuery() {
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
 
-export const getSiteUrl = () => window.location.protocol + "//" + window.location.hostname;
+export const getSiteUrl = () =>
+  window.location.protocol + "//" + window.location.hostname;
