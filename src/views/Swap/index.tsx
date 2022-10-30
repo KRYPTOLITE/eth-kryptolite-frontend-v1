@@ -447,11 +447,9 @@ export default function Swap() {
           const apiResponse = await res.json();
           const mc = new BigNumber(apiResponse.result)
             .div(BIG_TEN.pow(currency.decimals))
-            .times(formattedPrice)
-            .toNumber()
-            .toLocaleString();
+            .times(formattedPrice);
 
-          setMarketCap(mc);
+          setMarketCap(mc.isFinite() ? mc.toNumber().toLocaleString() : "-");
         });
       } else {
         setMarketCap("-");
