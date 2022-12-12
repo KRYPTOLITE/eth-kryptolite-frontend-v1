@@ -1,5 +1,5 @@
 // ETH Address
-const ETH_ADDRESS = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
+const ETH_ADDRESS = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
 
 export { ETH_ADDRESS };
 
@@ -8,7 +8,7 @@ export const getTokenAddress = (tokenAddress: undefined | string) => {
     return "";
   }
   const lowerCaseAddress = tokenAddress.toLowerCase();
-  if (lowerCaseAddress === "bnb") {
+  if (lowerCaseAddress === "eth") {
     return ETH_ADDRESS;
   }
 

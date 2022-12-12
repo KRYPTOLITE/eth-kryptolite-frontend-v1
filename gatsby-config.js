@@ -3,7 +3,7 @@ module.exports = {
   siteMetadata: {
     title: `KRYPTOLITE - the next 100X DeFi gem you don't want to miss`,
     siteUrl: "https://kryptolite.rocks",
-    description: "KRYPTOLITE - the next 100X DeFi gem you don't want to miss",
+    description: "The next 100X DeFi gem you don't want to miss",
   },
   trailingSlash: "never",
   graphqlTypegen: false,

@@ -23,14 +23,19 @@ const CurrencyInputHeader: React.FC<Props> = ({
   const supportedProjectNetworks = [
     {
       id: "idjief",
-      name: "Binace Smart Chain (Beb20)",
+      name: "Binance Smart Chain (Beb20)",
       projectLink: "https://kryptolite.rocks/swap",
+    },
+    {
+      id: "i4t49ef",
+      name: "Cronos Network",
+      projectLink: "https://cro.kryptolite.rocks/swap",
     },
   ];
   return (
     <div className="flex flex-col items-center py-6 mb-3 w-full border-b">
       <div className="flex w-full items-center justify-between mb-2">
-        <div className="flex flex-col items-start mr-6">
+        <div className="flex flex-col items-start mr-4">
           <h2 className="text-2xl my-0">{title}</h2>
         </div>
         <div
@@ -38,7 +43,7 @@ const CurrencyInputHeader: React.FC<Props> = ({
             focus:text-primary-800 hover:bg-primary-100 focus:bg-primary-100 flex justify-between items-center gap-1
               group relative mx-3 w-full border-2 border-primary-600"
         >
-          <p className="text-xs w-full">Switch Network</p>
+          <p className="text-xs w-full">ETH: Switch Network</p>
           <BiCaretDown />
           <div
             className="invisible group-hover:visible top-full shadow-lg absolute bg-white flex flex-col w-full left-0
@@ -46,6 +51,7 @@ const CurrencyInputHeader: React.FC<Props> = ({
           >
             {supportedProjectNetworks.map((project) => (
               <Link
+                key={project.id}
                 to={project.projectLink}
                 className="p-2 block font-normal text-primary-600 hover:text-primary-800 focus:text-primary-800
                   bg-white focus:outline-none text-sm"
